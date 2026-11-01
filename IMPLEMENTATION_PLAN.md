@@ -46,9 +46,10 @@
 | 10 | Integration and robustness audit | 8 | 0 | 0 | 8 | 100% |
 | 11 | Documentation and showcase preparation | 8 | 0 | 0 | 8 | 100% |
 | 12 | Optional stretch (only after Phases 0 to 11 are complete) | 0 | 0 | 0 | 5 | 0% |
-| | **Overall** | **124** | | | **129** | **96%** |
+| 13 | Chatbot (LLM concierge) | 1 | 0 | 0 | 30 | 3% |
+| | **Overall** | **125** | | | **159** | **78%** |
 
-`[###################-] 96%  (124/129 tasks)`
+`[###############-----] 78%  (125/159 tasks)`
 <!-- PROGRESS:END -->
 
 ---
@@ -710,6 +711,50 @@ Each item must keep the API free of deep-learning imports (training offline, art
 - [ ] **P12.3** Poster and image support via a licensed source (for example TMDB, requires an API key and its attribution text) behind a config flag.
 - [ ] **P12.4** A fourth real content type (books or music) using only an adapter and a config, to demonstrate extensibility with real data.
 - [ ] **P12.5** Side-by-side model switcher in the UI (same user, two models).
+
+---
+
+## PHASE 13: Chatbot (LLM concierge)
+
+What this is: an LLM-augmented concierge over the engine's recommendations. It is not an LLM-based ranking system. The ML models (SAR, TF-IDF) generate and rank candidates; the LLM only chooses among engine-provided candidates, explains them in natural language, and handles natural-language requests. Additive feature behind a flag (CHAT_ENABLED=false by default in CI) that can never break the base demo.
+
+### 13A. Decisions and prerequisites
+- [x] **P13.1** Write decision record D-036: scope ("LLM-augmented concierge", not an LLM ranker), provider and model chosen via env, the per-project quota fact and the multi-project policy of section 5, data sent to the provider, free-tier data-use terms (looked up in the current terms), chat implemented in FastAPI. *Acceptance:* entry in `docs/DECISIONS.md` citing the documentation pages consulted.
+- [ ] **P13.2** HUMAN: create the key(s) and set `GEMINI_API_KEYS`, `GEMINI_MODEL` (and `GEMINI_KEY_PROJECTS` only if keys really come from different owned projects) in the backend environment; confirm the current model id and tier limits in AI Studio. *Acceptance:* human confirms; the agent never sees a key value.
+- [ ] **P13.3** Update `docs/DATASETS.md`, `docs/ATTRIBUTION.md` and the About tab text with what data is sent to the provider and the AI-generated-content notice. *Acceptance:* text reviewed against the actual prompt builder output (P13.9).
+
+### 13B. Backend (FastAPI, package `backend/engine/llm/`, route in `backend/api/routes/chat.py`)
+- [ ] **P13.4** Package skeleton: `LLMClient` protocol (`async complete(request) -> LLMResult`), typed errors (`LLMRateLimited(retry_after)`, `LLMAuthError`, `LLMTimeout`, `LLMUpstreamError`, `LLMBadOutput`). No content-type literals. *Acceptance:* mypy strict clean; `test_generic_types.py` still passes.
+- [ ] **P13.5** `FakeLLMClient` (scripted answers, records prompts, can raise each error type). *Acceptance:* used by all later tests; no network in any non-`llm_live` test.
+- [ ] **P13.6** `GeminiClient` (async `httpx`): header key, timeout, response schema with the candidate-id enum, token cap, error mapping (429 with retry info, 401/403, 5xx, timeout, malformed JSON). Key never in URL, repr or logs. *Acceptance:* tests with a mocked transport cover each status code; a `caplog` test proves no key material is logged.
+- [ ] **P13.7** `QuotaManager` exactly as section 5, with injectable clock and RNG. *Acceptance:* unit tests (fake clock): round robin across projects; same-project keys collapse into one bucket (no capacity gain); 429 cooldown honours Retry-After and caps backoff with bounded jitter; 401 disables; all-cooling returns `None` with earliest ready time; limiter blocks at RPM; concurrent callers (asyncio) never exceed the limit; hypothesis test for state invariants.
+- [ ] **P13.8** Settings loader for the env vars of section 4.4 with validation (key/project length mismatch is an error; unknown values fail loudly). Startup log shows only counts. *Acceptance:* tests for valid/invalid configs; nothing secret logged.
+- [ ] **P13.9** `chat:` section in `ContentTypeSpec` (noun, card fields, starter prompts, persona wording) with defaults, plus a prompt builder: system prompt, delimited data blocks, injection warning, profile aggregates only. *Acceptance:* snapshot test of the prompt for each type; test that no raw user id and no secret appears; no content-type literals in engine code.
+- [ ] **P13.10** Candidate assembly: personalised top-20 (popular if the user is unknown or cold), popular top-10, search hits for the last user message (top-10), dedupe, cap 40, stable order. *Acceptance:* tests for known user, unknown user, empty message hits, dedupe, cap.
+- [ ] **P13.11** Output validator: JSON parse, picks must be a subset of the candidates, dedupe, at most 5, reason at most 200 chars and reply at most 800 chars, markup and URLs stripped. Anything else raises `LLMBadOutput`. *Acceptance:* hypothesis test: for arbitrary model output the validated picks are **always** a subset of the candidate ids.
+- [ ] **P13.12** Fallback builder: engine-only picks with a templated reply; `mode="fallback"` plus a `fallback_reason`. *Acceptance:* every failure type of the fake client yields HTTP 200 with a valid fallback body.
+- [ ] **P13.13** Response cache (TTL LRU keyed by type, user, normalised last message, candidate ids and model) and coalescing of identical in-flight requests. *Acceptance:* tests: second call is a cache hit with zero upstream calls; 5 concurrent identical requests make 1 upstream call.
+- [ ] **P13.14** `POST /v1/chat` and `GET /v1/chat/status` with pydantic schemas, the limits of section 4.1, per-IP sliding-window limit with `Retry-After`, kill switch (`CHAT_ENABLED`). Items in the response are built from the **catalogue lookups**, never from model text. *Acceptance:* contract tests with the fake client for all three types and all error paths.
+- [ ] **P13.15** Regenerate `backend/api/openapi.json`; update `docs/CONFORMANCE.md` (R12 row); keep the openapi test green. *Acceptance:* `python tools/check_conformance.py --check` passes.
+- [ ] **P13.16** Safety tests (gate R12): prompt-injection fixtures (item titles such as "Ignore previous instructions and ..."), model returning an id outside the candidates, model returning markup/URLs, oversize output, empty candidate set. *Acceptance:* all produce a validated answer or a fallback, never an item outside the catalogue.
+- [ ] **P13.17** Performance and resource check: with the fake client, `/v1/chat` adds under 50 ms p95 over the engine calls; the LLM call is async and does not block other endpoints (a concurrent `/v1/recommend` load test stays within its budget). *Acceptance:* numbers recorded in `docs/RESULTS.md` (generated section).
+
+### 13C. Frontend (Next.js)
+- [ ] **P13.18** Route handler `frontend/app/api/chat/route.ts`: **proxy only** to FastAPI via the server-only `API_BASE_URL`; zod-validate request and response; forward `Retry-After`; no Gemini code or keys in the frontend. Extend `scripts/check_bundle_secrets.mjs` to fail on `GEMINI`, `AIza` and `NEXT_PUBLIC_GEMINI`. *Acceptance:* `npm run check-secrets` passes; a deliberate leak fixture fails it.
+- [ ] **P13.19** Generated TypeScript types from the new `openapi.json` and zod schemas for the chat response. *Acceptance:* contract test between zod and OpenAPI types.
+- [ ] **P13.20** `ChatPanel` component: `role="dialog"` with `aria-modal`, focus trap and Escape (reuse the ItemDrawer logic), focus returns to the launcher, an `aria-live="polite"` message log, theme tokens only (no hard-coded hex), WCAG AA contrast, `prefers-reduced-motion`, mobile full-height sheet using `100dvh` and safe-area insets. *Acceptance:* axe has no serious violations; keyboard-only test passes.
+- [ ] **P13.21** Message and card rendering: plain text paragraphs only; `PickCard` built from the catalogue fields (title, subtitle, category chips, engine rank); "View item" opens the existing `ItemDrawer`; poster only if the existing hook provides one. *Acceptance:* a test with a malicious reply string (HTML and script tags) renders as text.
+- [ ] **P13.22** Starter prompt chips come from the `chat:` config via the API (not hard-coded per type). *Acceptance:* chips change with the content type in a component test.
+- [ ] **P13.23** States: not configured (`/status` not ready: friendly onboarding without asking for a key), loading, rate-limited (shows the retry time), fallback badge ("answer from the engine"), error with retry, Stop button (abort), clear conversation (in memory only), "AI-generated, may be wrong" notice. *Acceptance:* one test per state.
+- [ ] **P13.24** "Ask AI" button in `AppHeader` and a floating launcher (no pulse animation); `AIInsights.tsx` untouched (its tests still pass unchanged). *Acceptance:* git diff shows no change to `AIInsights.tsx`.
+- [ ] **P13.25** Frontend tests: MSW fixtures recorded from the real endpoint, component and keyboard tests, a Playwright mobile-viewport screenshot (360 px) and a desktop one. *Acceptance:* `npm run lint`, `type-check`, `test`, `check-secrets` green.
+
+### 13D. Evaluation, optional work, docs
+- [ ] **P13.26** Live smoke suite marked `llm_live` (never run in CI, skipped without keys): 20 prompts per content type against the real model; record the rate of invalid ids, fallback rate and latency in `docs/CHATBOT_EVAL.md` (generated from a saved JSON, no hand-typed numbers). *Acceptance:* file exists with the run date, model id and counts.
+- [ ] **P13.27** OPTIONAL: streaming (server-sent events through the Next proxy) with abort support. *Acceptance:* only if time allows; must keep the validation step before display.
+- [ ] **P13.28** OPTIONAL: second `LLMClient` for a local model (for example through Ollama) selectable by config, with the same validator and fallback. *Acceptance:* same contract tests pass with the fake transport.
+- [ ] **P13.29** Docs: README section (what it is, what is sent, limits), About tab, `docs/DEMO_SCRIPT.md` demo flow (one question per content type, one forced fallback), decision records, plan section update. *Acceptance:* all statements match the code (`python tools/verify_claims.py` if present).
+- [ ] **P13.30** Phase 13 gate and "break your own work" ritual: five hypotheses, each tested (an injected item title; an invented id; every key returns 429; a key echoed inside an upstream error body; an oversized conversation), plus a clean-clone CI run (`pytest -m "not real_data and not llm_live"`) and `python tools/check.py`. *Acceptance:* raw outputs in the Session Log.
 
 ---
 
