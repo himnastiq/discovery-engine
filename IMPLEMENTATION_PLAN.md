@@ -46,10 +46,10 @@
 | 10 | Integration and robustness audit | 8 | 0 | 0 | 8 | 100% |
 | 11 | Documentation and showcase preparation | 8 | 0 | 0 | 8 | 100% |
 | 12 | Optional stretch (only after Phases 0 to 11 are complete) | 0 | 0 | 0 | 5 | 0% |
-| 13 | Chatbot (LLM concierge) | 1 | 0 | 0 | 30 | 3% |
-| | **Overall** | **125** | | | **159** | **78%** |
+| 13 | Chatbot (LLM concierge) | 2 | 0 | 0 | 30 | 6% |
+| | **Overall** | **126** | | | **159** | **79%** |
 
-`[###############-----] 78%  (125/159 tasks)`
+`[###############-----] 79%  (126/159 tasks)`
 <!-- PROGRESS:END -->
 
 ---
@@ -721,7 +721,7 @@ What this is: an LLM-augmented concierge over the engine's recommendations. It i
 ### 13A. Decisions and prerequisites
 - [x] **P13.1** Write decision record D-036: scope ("LLM-augmented concierge", not an LLM ranker), provider and model chosen via env, the per-project quota fact and the multi-project policy of section 5, data sent to the provider, free-tier data-use terms (looked up in the current terms), chat implemented in FastAPI. *Acceptance:* entry in `docs/DECISIONS.md` citing the documentation pages consulted.
 - [ ] **P13.2** HUMAN: create the key(s) and set `GEMINI_API_KEYS`, `GEMINI_MODEL` (and `GEMINI_KEY_PROJECTS` only if keys really come from different owned projects) in the backend environment; confirm the current model id and tier limits in AI Studio. *Acceptance:* human confirms; the agent never sees a key value.
-- [ ] **P13.3** Update `docs/DATASETS.md`, `docs/ATTRIBUTION.md` and the About tab text with what data is sent to the provider and the AI-generated-content notice. *Acceptance:* text reviewed against the actual prompt builder output (P13.9).
+- [x] **P13.3** Update `docs/DATASETS.md`, `docs/ATTRIBUTION.md` and the About tab text with what data is sent to the provider and the AI-generated-content notice. *Acceptance:* text reviewed against the actual prompt builder output (P13.9).
 
 ### 13B. Backend (FastAPI, package `backend/engine/llm/`, route in `backend/api/routes/chat.py`)
 - [ ] **P13.4** Package skeleton: `LLMClient` protocol (`async complete(request) -> LLMResult`), typed errors (`LLMRateLimited(retry_after)`, `LLMAuthError`, `LLMTimeout`, `LLMUpstreamError`, `LLMBadOutput`). No content-type literals. *Acceptance:* mypy strict clean; `test_generic_types.py` still passes.

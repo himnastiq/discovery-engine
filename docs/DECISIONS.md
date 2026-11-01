@@ -955,7 +955,7 @@ Task P13.1 establishes the foundational design record for Phase 13 (Discovery As
 5. **Free-Tier Data-Use Terms:**
    Under Google Gen AI Developer Terms of Service for the Free Tier, Google may use input prompts and generated responses to improve Google products, subject to privacy guidelines. For Paid Tier (Google Cloud Vertex AI or paid Developer tier), customer data is not retained for training. This distinction and data usage notice must be clearly disclosed in `docs/DATASETS.md`, `docs/ATTRIBUTION.md`, and the UI About tab.
 6. **Backend Implementation in FastAPI:**
-   All chat orchestration, candidate retrieval, rate limiting, and Gemini API calls are implemented in Python in FastAPI (`backend/api/routes/chat.py` and `backend/engine/llm/`). The Next.js frontend route (`frontend/app/api/chat/route.ts`) acts solely as a same-origin proxy to FastAPI, preventing duplicated LLM logic and preventing API key exposure to the client bundle.
+   All chat orchestration, candidate retrieval, rate limiting, and Gemini API calls are implemented in Python in FastAPI (route `api.routes.chat` and package `engine.llm`). The Next.js frontend route (`/api/chat` handler) acts solely as a same-origin proxy to FastAPI, preventing duplicated LLM logic and preventing API key exposure to the client bundle.
 
 **Documentation Consulted:**
 - Google AI for Developers: Gemini API Terms of Service (https://ai.google.dev/gemini-api/terms)

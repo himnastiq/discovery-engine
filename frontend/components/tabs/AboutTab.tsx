@@ -318,6 +318,19 @@ export function AboutTab() {
               Movie poster artwork is dynamically queried via the TMDB API. <strong>This product uses the TMDB API but is not endorsed or certified by TMDB.</strong>
             </p>
           </div>
+
+          {/* Google Gemini LLM Concierge Attribution */}
+          <div className="rounded-[var(--radius-card)] bg-[var(--color-elevated)] border border-[var(--color-border)] p-4 space-y-1.5">
+            <div className="flex items-center justify-between">
+              <h4 className="font-bold text-[var(--color-text)]">Google Gemini API (Discovery Assistant)</h4>
+              <span className="text-[10px] font-semibold text-[var(--color-accent-text)] bg-[var(--color-bg)] px-2 py-0.5 rounded border border-[var(--color-border)]">
+                AI Service Notice
+              </span>
+            </div>
+            <p className="text-[var(--color-text-secondary)] leading-relaxed">
+              The Discovery Assistant chatbot utilizes the Google Gemini API (gemini-2.5-flash) as an LLM concierge. <strong>AI-generated responses and natural-language explanations may contain inaccuracies;</strong> all recommended items and ranks are grounded in and strictly validated against the engine&apos;s offline catalog. Only aggregate category shares and candidate item titles are sent upstream; zero raw user IDs or personal data are transmitted.
+            </p>
+          </div>
         </div>
       </div>
 

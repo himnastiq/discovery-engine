@@ -154,6 +154,6 @@ As documented in [`docs/DECISIONS.md`](docs/DECISIONS.md) (D-018), key boundarie
 
 ## License & Notices
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE) for educational and non-commercial use.
 
 Derived reference code in `backend/discovery/` retains its original [MIT License](backend/discovery/LICENSE) from upstream contributors. See [`backend/discovery/NOTICE.md`](backend/discovery/NOTICE.md) for adaptation history.
