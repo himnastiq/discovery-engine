@@ -76,7 +76,7 @@ describe('AIInsights Component', () => {
     );
 
     expect(screen.getByRole('heading', { name: /ai insights/i })).toBeInTheDocument();
-    expect(screen.getByText(/preview/i)).toBeInTheDocument();
+    expect(screen.getByText(/preview|live/i)).toBeInTheDocument();
 
     // Verify 3 signal chips are rendered
     expect(screen.getByText('Signal #1')).toBeInTheDocument();

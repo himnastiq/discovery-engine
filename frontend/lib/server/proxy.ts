@@ -48,15 +48,27 @@ export async function proxyToBackend(
     });
 
     const contentType = res.headers.get('content-type') || '';
+    const retryAfter = res.headers.get('retry-after');
+    const responseHeaders: Record<string, string> = {};
+    if (retryAfter) {
+      responseHeaders['Retry-After'] = retryAfter;
+    }
+
     if (contentType.includes('application/json')) {
       const data = await res.json();
-      return NextResponse.json(data, { status: res.status });
+      return NextResponse.json(data, {
+        status: res.status,
+        headers: Object.keys(responseHeaders).length > 0 ? responseHeaders : undefined,
+      });
     }
 
     const text = await res.text();
     return new NextResponse(text, {
       status: res.status,
-      headers: { 'Content-Type': contentType || 'text/plain' },
+      headers: {
+        'Content-Type': contentType || 'text/plain',
+        ...responseHeaders,
+      },
     });
   } catch (err: unknown) {
     console.error('[proxy]', backendPath, err);
