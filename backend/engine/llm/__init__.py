@@ -13,6 +13,7 @@ from engine.llm.errors import (
 from engine.llm.fake import FakeLLMClient
 from engine.llm.gemini import GeminiClient
 from engine.llm.quota import QuotaManager
+from engine.llm.settings import ChatSettings, load_chat_settings, log_chat_startup
 from engine.llm.types import (
     LLMClient,
     LLMPick,
@@ -21,6 +22,7 @@ from engine.llm.types import (
 )
 
 __all__ = [
+    "ChatSettings",
     "FakeLLMClient",
     "GeminiClient",
     "LLMAuthError",
@@ -34,4 +36,6 @@ __all__ = [
     "LLMTimeout",
     "LLMUpstreamError",
     "QuotaManager",
+    "load_chat_settings",
+    "log_chat_startup",
 ]
