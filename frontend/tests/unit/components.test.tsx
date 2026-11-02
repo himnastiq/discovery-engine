@@ -1,11 +1,20 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { ErrorState } from '@/components/ui/ErrorState';
 import { Tabs } from '@/components/ui/Tabs';
+import { AppHeader } from '@/components/shell/AppHeader';
+
+function renderWithClient(ui: React.ReactElement) {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false, gcTime: 0 } },
+  });
+  return render(<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>);
+}
 
 describe('Design System Primitives (P8.6)', () => {
   it('renders Button with variants and handles click events', () => {
@@ -75,6 +84,24 @@ describe('Design System Primitives (P8.6)', () => {
     const compareTab = screen.getByRole('tab', { name: /compare/i });
     fireEvent.click(compareTab);
     expect(handleTabChange).toHaveBeenCalledWith('compare');
+  });
+
+  it('renders AppHeader with Ask AI button and invokes onOpenChat callback (P13.24)', () => {
+    const handleOpenChat = vi.fn();
+    renderWithClient(
+      <AppHeader
+        currentType="movies"
+        onTypeChange={vi.fn()}
+        currentUser="1"
+        onUserChange={vi.fn()}
+        onOpenChat={handleOpenChat}
+      />
+    );
+
+    const askAiBtn = screen.getByRole('button', { name: /open discovery assistant/i });
+    expect(askAiBtn).toBeInTheDocument();
+    fireEvent.click(askAiBtn);
+    expect(handleOpenChat).toHaveBeenCalledTimes(1);
   });
 });
 

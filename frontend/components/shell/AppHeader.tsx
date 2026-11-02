@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Sparkles } from 'lucide-react';
+// import { Sparkles } from 'lucide-react';
+import { Search, Sparkles } from 'lucide-react';
+
 import { TypeSwitcher } from './TypeSwitcher';
 import { UserSelect } from './UserSelect';
 import type { ContentTypeKey } from '@/lib/hooks/useUrlState';
@@ -11,6 +13,7 @@ export interface AppHeaderProps {
   onTypeChange: (type: ContentTypeKey, defaultUserId?: string) => void;
   currentUser: string;
   onUserChange: (user: string) => void;
+  onOpenChat?: () => void;
 }
 
 export function AppHeader({
@@ -18,6 +21,7 @@ export function AppHeader({
   onTypeChange,
   currentUser,
   onUserChange,
+  onOpenChat,
 }: AppHeaderProps) {
   return (
     <header className="sm:sticky sm:top-0 z-40 w-full border-b border-[var(--color-border)] bg-[var(--color-bg)]">
@@ -25,7 +29,8 @@ export function AppHeader({
         {/* Product Brand (Left) */}
         <div className="flex items-center gap-2.5 sm:flex-1 sm:justify-start">
           <div className="h-7 w-7 rounded-[4px] bg-[var(--color-accent)] text-white flex items-center justify-center font-bold text-xs shadow-sm shrink-0">
-            <Sparkles className="h-4 w-4" />
+            {/* <Sparkles className="h-4 w-4" /> */}
+            <Search className="h-4 w-4" />
           </div>
           <span className="font-bold text-sm sm:text-base tracking-tight text-[var(--color-text)] whitespace-nowrap">
             Discovery Engine
@@ -37,13 +42,24 @@ export function AppHeader({
           <TypeSwitcher currentType={currentType} onTypeChange={onTypeChange} />
         </div>
 
-        {/* User Selection Controls (Right) */}
+        {/* User Selection Controls & Ask AI (Right) */}
         <div className="flex items-center gap-2 sm:gap-3 sm:flex-1 sm:justify-end">
           <UserSelect
             currentType={currentType}
             currentUser={currentUser}
             onUserChange={onUserChange}
           />
+          {onOpenChat && (
+            <button
+              type="button"
+              onClick={onOpenChat}
+              aria-label="Open Discovery Assistant"
+              className="inline-flex items-center gap-1.5 rounded-[4px] border border-[var(--color-border)] bg-[var(--color-elevated)] px-2.5 py-1.5 text-xs font-semibold text-[var(--color-text)] hover:border-[var(--color-accent-text)] hover:text-[var(--color-accent-text)] transition-colors focus-visible:outline-2 focus-visible:outline-[var(--color-accent-text)] cursor-pointer"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-[var(--color-accent-text)]" />
+              <span className="hidden sm:inline">Ask AI</span>
+            </button>
+          )}
         </div>
       </div>
     </header>

@@ -1,7 +1,8 @@
 'use client';
 
 import React, { Suspense } from 'react';
-import { AlertCircle, Sparkles } from 'lucide-react';
+// import { AlertCircle, Sparkles } from 'lucide-react';
+import { AlertCircle, Search } from 'lucide-react';
 import { AppHeader } from '@/components/shell/AppHeader';
 import { TabNavigation } from '@/components/shell/TabNavigation';
 import { useUrlState } from '@/lib/hooks/useUrlState';
@@ -11,10 +12,13 @@ import { CompareTab } from '@/components/tabs/CompareTab';
 import { ColdStartTab } from '@/components/tabs/ColdStartTab';
 import { EvaluationTab } from '@/components/tabs/EvaluationTab';
 import { ItemDrawer } from '@/components/features/ItemDrawer';
+import { ChatPanel } from '@/components/features/ChatPanel';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Button } from '@/components/ui/Button';
+import { Sparkles } from 'lucide-react';
 
 function DashboardContent() {
+  const [isChatOpen, setIsChatOpen] = React.useState(false);
   const {
     type,
     tab,
@@ -40,7 +44,7 @@ function DashboardContent() {
           <div className="max-w-shell mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
               <div className="h-7 w-7 rounded-[4px] bg-[var(--color-accent)] text-white flex items-center justify-center font-bold text-xs shadow-sm">
-                <Sparkles className="h-4 w-4" />
+                <Search className="h-4 w-4" />
               </div>
               <span className="font-bold text-sm sm:text-base tracking-tight text-[var(--color-text)]">
                 Discovery Engine
@@ -83,6 +87,7 @@ function DashboardContent() {
         onTypeChange={(newType, defaultUser) => switchType(newType, defaultUser)}
         currentUser={user}
         onUserChange={setUser}
+        onOpenChat={() => setIsChatOpen(true)}
       />
       <TabNavigation activeTab={tab} onTabChange={setTab} />
 
@@ -131,6 +136,25 @@ function DashboardContent() {
         itemId={item}
         cardType={cardType}
         onClose={() => setItem(null)}
+        onSelectItem={(selected) => setItem(selected.item_id)}
+      />
+
+      {/* Floating Chat Launcher (no pulse animation) */}
+      <button
+        type="button"
+        onClick={() => setIsChatOpen(true)}
+        aria-label="Open Discovery Assistant"
+        className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-accent)] text-white shadow-xl hover:bg-[var(--color-accent-hover)] transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-[var(--color-accent-text)] cursor-pointer"
+      >
+        <Sparkles className="h-5 w-5" />
+      </button>
+
+      {/* Discovery Assistant Chatbot Dialog */}
+      <ChatPanel
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        activeType={type}
+        activeUserId={user}
         onSelectItem={(selected) => setItem(selected.item_id)}
       />
     </div>
