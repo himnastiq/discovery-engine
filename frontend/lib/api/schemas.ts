@@ -43,6 +43,7 @@ export const TypeInfoSchema = z.object({
   user_count: z.number().default(0),
   item_count: z.number().default(0),
   interaction_count: z.number().default(0),
+  starter_prompts: z.array(z.string()).default([]).optional(),
 });
 
 export const TypesResponseSchema = z.object({

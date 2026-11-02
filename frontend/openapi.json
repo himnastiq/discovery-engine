@@ -1870,6 +1870,14 @@
             "title": "Interaction Count",
             "description": "Total interactions processed",
             "default": 0
+          },
+          "starter_prompts": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Starter Prompts",
+            "description": "Domain starter prompt chips for chat concierge"
           }
         },
         "type": "object",

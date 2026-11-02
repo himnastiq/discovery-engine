@@ -147,6 +147,9 @@ def get_types(request: Request) -> TypesResponse:
                 user_count=user_count,
                 item_count=item_count,
                 interaction_count=interaction_count,
+                starter_prompts=list(spec.chat.starter_prompts)
+                if hasattr(spec, "chat") and spec.chat
+                else [],
             )
         )
 

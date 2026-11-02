@@ -1032,6 +1032,11 @@ export interface components {
              * @default 0
              */
             interaction_count: number;
+            /**
+             * Starter Prompts
+             * @description Domain starter prompt chips for chat concierge
+             */
+            starter_prompts?: string[];
         };
         /**
          * TypesResponse

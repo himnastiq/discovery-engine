@@ -62,6 +62,9 @@ class TypeInfo(BaseModel):
     user_count: int = Field(default=0, description="Total unique users in training/evaluation")
     item_count: int = Field(default=0, description="Total items in catalogue")
     interaction_count: int = Field(default=0, description="Total interactions processed")
+    starter_prompts: list[str] = Field(
+        default_factory=list, description="Domain starter prompt chips for chat concierge"
+    )
 
 
 class TypesResponse(BaseModel):
