@@ -9,7 +9,10 @@ import {
   SearchResponseSchema,
   MetricsResponseSchema,
   AboutResponseSchema,
+  ChatStatusResponseSchema,
+  ChatResponseSchema,
   type ColdStartRequest,
+  type ChatRequest,
 } from './schemas';
 export type {
   TypesResponse,
@@ -21,6 +24,9 @@ export type {
   MetricsResponse,
   AboutResponse,
   ColdStartRequest,
+  ChatRequest,
+  ChatResponse,
+  ChatStatusResponse,
 } from './schemas';
 
 export class ApiError extends Error {
@@ -172,4 +178,15 @@ export const apiClient = {
     ),
 
   getAbout: (signal?: AbortSignal) => apiFetch(AboutResponseSchema, '/api/about', { signal }),
+
+  getChatStatus: (signal?: AbortSignal) =>
+    apiFetch(ChatStatusResponseSchema, '/api/chat', { signal }),
+
+  postChat: (request: ChatRequest, signal?: AbortSignal) =>
+    apiFetch(ChatResponseSchema, '/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request),
+      signal,
+    }),
 };

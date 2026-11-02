@@ -1,0 +1,39 @@
+{
+  "reply": "Here are two personalized recommendations based on your taste profile:",
+  "picks": [
+    {
+      "item_id": "1",
+      "title": "Toy Story",
+      "subtitle": "Animation | Adventure | Comedy",
+      "categories": [
+        "Animation",
+        "Adventure",
+        "Comedy"
+      ],
+      "year": 1995,
+      "reason": "Classic Pixar animation with groundbreaking visuals.",
+      "rank": 1
+    },
+    {
+      "item_id": "260",
+      "title": "Star Wars: Episode IV - A New Hope",
+      "subtitle": "Action | Adventure | Sci-Fi",
+      "categories": [
+        "Action",
+        "Adventure",
+        "Sci-Fi"
+      ],
+      "year": 1977,
+      "reason": "Epic sci-fi adventure matching your high affinity for space operas.",
+      "rank": 2
+    }
+  ],
+  "mode": "llm",
+  "meta": {
+    "model": "gemini-2.5-flash",
+    "latency_ms": 142,
+    "cache_hit": false,
+    "fallback_reason": null,
+    "retry_after_s": null
+  }
+}

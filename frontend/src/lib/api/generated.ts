@@ -244,6 +244,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/chat/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Chat Status
+         * @description Readiness and configuration status for the Discovery Assistant.
+         */
+        get: operations["get_chat_status_v1_chat_status_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/chat": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Post Chat
+         * @description Conversational recommendations grounded in candidate items from the engine.
+         */
+        post: operations["post_chat_v1_chat_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -301,6 +341,160 @@ export interface components {
              * @description Fraction of total user interactions
              */
             share: number;
+        };
+        /**
+         * ChatMessage
+         * @description A single chat message in a conversation turn.
+         */
+        ChatMessage: {
+            /**
+             * Role
+             * @description Message author role ('user' or 'assistant')
+             */
+            role: string;
+            /**
+             * Content
+             * @description Message text content
+             */
+            content: string;
+        };
+        /**
+         * ChatMeta
+         * @description Diagnostic and execution metadata for a chat completion.
+         */
+        ChatMeta: {
+            /**
+             * Model
+             * @description Active LLM model identifier
+             */
+            model?: string | null;
+            /**
+             * Latency Ms
+             * @description Elapsed request time in milliseconds
+             */
+            latency_ms: number;
+            /**
+             * Cache Hit
+             * @description Whether response was served from cache
+             * @default false
+             */
+            cache_hit: boolean;
+            /**
+             * Fallback Reason
+             * @description Reason for engine fallback if mode='fallback'
+             */
+            fallback_reason?: string | null;
+            /**
+             * Retry After S
+             * @description Recommended retry cooldown in seconds
+             */
+            retry_after_s?: number | null;
+        };
+        /**
+         * ChatPick
+         * @description A grounded candidate item recommended by the concierge.
+         */
+        ChatPick: {
+            /**
+             * Item Id
+             * @description Item unique identifier
+             */
+            item_id: string;
+            /**
+             * Title
+             * @description Item display title
+             */
+            title: string;
+            /**
+             * Subtitle
+             * @description Item subtitle
+             */
+            subtitle?: string | null;
+            /**
+             * Categories
+             * @description Item categories list
+             */
+            categories?: string[];
+            /**
+             * Year
+             * @description Release or publication year
+             */
+            year?: number | null;
+            /**
+             * Reason
+             * @description Concise plain text recommendation rationale
+             */
+            reason: string;
+            /**
+             * Rank
+             * @description 1-based candidate rank from the engine
+             */
+            rank: number;
+        };
+        /**
+         * ChatRequest
+         * @description Request payload for POST /v1/chat.
+         */
+        ChatRequest: {
+            /**
+             * Type
+             * @description Content type identifier
+             */
+            type: string;
+            /**
+             * User Id
+             * @description Optional user unique ID
+             */
+            user_id?: string | null;
+            /**
+             * Messages
+             * @description Conversation history (1 to 10 messages)
+             */
+            messages: components["schemas"]["ChatMessage"][];
+        };
+        /**
+         * ChatResponse
+         * @description Unified response payload for POST /v1/chat.
+         */
+        ChatResponse: {
+            /**
+             * Reply
+             * @description Plain text conversational response
+             */
+            reply: string;
+            /**
+             * Picks
+             * @description Curated recommendation cards
+             */
+            picks?: components["schemas"]["ChatPick"][];
+            /**
+             * Mode
+             * @description Serving mode: 'llm' or 'fallback'
+             */
+            mode: string;
+            /** @description Request metadata and status */
+            meta: components["schemas"]["ChatMeta"];
+        };
+        /**
+         * ChatStatusResponse
+         * @description Response payload for GET /v1/chat/status.
+         */
+        ChatStatusResponse: {
+            /**
+             * Enabled
+             * @description Whether chat feature flag CHAT_ENABLED is active
+             */
+            enabled: boolean;
+            /**
+             * Ready
+             * @description Whether LLM service has valid credentials ready
+             */
+            ready: boolean;
+            /**
+             * Model
+             * @description Configured model identifier
+             */
+            model?: string | null;
         };
         /**
          * ColdStartRequest
@@ -1340,6 +1534,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimilarResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_chat_status_v1_chat_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatStatusResponse"];
+                };
+            };
+        };
+    };
+    post_chat_v1_chat_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChatRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ChatResponse"];
                 };
             };
             /** @description Validation Error */

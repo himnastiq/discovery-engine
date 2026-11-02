@@ -226,3 +226,87 @@ export type MetricsResponse = z.infer<typeof MetricsResponseSchema>;
 export type DatasetAttribution = z.infer<typeof DatasetAttributionSchema>;
 export type AboutResponse = z.infer<typeof AboutResponseSchema>;
 
+// ---------------------------------------------------------------------------
+// Chat Schemas (Phase 13)
+// ---------------------------------------------------------------------------
+
+export const ChatMessageSchema = z.object({
+  role: z.enum(['user', 'assistant']),
+  content: z.string().min(1).max(500),
+});
+
+export const ChatRequestSchema = z
+  .object({
+    type: z.string().min(1).max(50),
+    user_id: z.string().nullable().optional(),
+    messages: z.array(ChatMessageSchema).min(1).max(10),
+  })
+  .refine(
+    (data) => {
+      const totalChars = data.messages.reduce((acc, m) => acc + m.content.length, 0);
+      return totalChars <= 4000;
+    },
+    { message: 'Total content across messages must not exceed 4,000 characters' }
+  )
+  .refine(
+    (data) => {
+      return data.messages[data.messages.length - 1].role === 'user';
+    },
+    { message: 'The last message must be from the user' }
+  );
+
+export const ChatPickSchema = z.object({
+  item_id: z.string(),
+  title: z.string(),
+  subtitle: z.string().nullable().optional(),
+  categories: z.array(z.string()).default([]),
+  year: z.number().nullable().optional(),
+  reason: z.string(),
+  rank: z.number().int().min(1),
+});
+
+export const PickCardSchema = ChatPickSchema;
+
+export const ChatMetaSchema = z.object({
+  model: z.string().nullable().optional(),
+  latency_ms: z.number(),
+  cache_hit: z.boolean().default(false),
+  fallback_reason: z
+    .enum([
+      'rate_limited',
+      'timeout',
+      'upstream_error',
+      'bad_output',
+      'disabled',
+      'no_credentials',
+    ])
+    .nullable()
+    .optional(),
+  retry_after_s: z.number().nullable().optional(),
+});
+
+export const ChatResponseSchema = z.object({
+  reply: z.string(),
+  picks: z.array(ChatPickSchema).default([]),
+  mode: z.enum(['llm', 'fallback']),
+  meta: ChatMetaSchema,
+});
+
+export const ChatStatusResponseSchema = z.object({
+  enabled: z.boolean(),
+  ready: z.boolean(),
+  model: z.string().nullable().optional(),
+});
+
+export const ChatStatusSchema = ChatStatusResponseSchema;
+
+export type ChatMessage = z.infer<typeof ChatMessageSchema>;
+export type ChatRequest = z.infer<typeof ChatRequestSchema>;
+export type ChatPick = z.infer<typeof ChatPickSchema>;
+export type PickCard = ChatPick;
+export type ChatMeta = z.infer<typeof ChatMetaSchema>;
+export type ChatResponse = z.infer<typeof ChatResponseSchema>;
+export type ChatStatusResponse = z.infer<typeof ChatStatusResponseSchema>;
+export type ChatStatus = ChatStatusResponse;
+
+

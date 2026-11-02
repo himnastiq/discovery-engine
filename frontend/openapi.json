@@ -644,6 +644,70 @@
           }
         }
       }
+    },
+    "/v1/chat/status": {
+      "get": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Get Chat Status",
+        "description": "Readiness and configuration status for the Discovery Assistant.",
+        "operationId": "get_chat_status_v1_chat_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/chat": {
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Post Chat",
+        "description": "Conversational recommendations grounded in candidate items from the engine.",
+        "operationId": "post_chat_v1_chat_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChatRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -718,6 +782,264 @@
         ],
         "title": "CategoryShare",
         "description": "Category preference breakdown item."
+      },
+      "ChatMessage": {
+        "properties": {
+          "role": {
+            "type": "string",
+            "title": "Role",
+            "description": "Message author role ('user' or 'assistant')"
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Content",
+            "description": "Message text content"
+          }
+        },
+        "type": "object",
+        "required": [
+          "role",
+          "content"
+        ],
+        "title": "ChatMessage",
+        "description": "A single chat message in a conversation turn."
+      },
+      "ChatMeta": {
+        "properties": {
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model",
+            "description": "Active LLM model identifier"
+          },
+          "latency_ms": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Latency Ms",
+            "description": "Elapsed request time in milliseconds"
+          },
+          "cache_hit": {
+            "type": "boolean",
+            "title": "Cache Hit",
+            "description": "Whether response was served from cache",
+            "default": false
+          },
+          "fallback_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fallback Reason",
+            "description": "Reason for engine fallback if mode='fallback'"
+          },
+          "retry_after_s": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retry After S",
+            "description": "Recommended retry cooldown in seconds"
+          }
+        },
+        "type": "object",
+        "required": [
+          "latency_ms"
+        ],
+        "title": "ChatMeta",
+        "description": "Diagnostic and execution metadata for a chat completion."
+      },
+      "ChatPick": {
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "title": "Item Id",
+            "description": "Item unique identifier"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "description": "Item display title"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subtitle",
+            "description": "Item subtitle"
+          },
+          "categories": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Categories",
+            "description": "Item categories list"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Year",
+            "description": "Release or publication year"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 200,
+            "title": "Reason",
+            "description": "Concise plain text recommendation rationale"
+          },
+          "rank": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Rank",
+            "description": "1-based candidate rank from the engine"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_id",
+          "title",
+          "reason",
+          "rank"
+        ],
+        "title": "ChatPick",
+        "description": "A grounded candidate item recommended by the concierge."
+      },
+      "ChatRequest": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 1,
+            "title": "Type",
+            "description": "Content type identifier"
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id",
+            "description": "Optional user unique ID"
+          },
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/ChatMessage"
+            },
+            "type": "array",
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Messages",
+            "description": "Conversation history (1 to 10 messages)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "messages"
+        ],
+        "title": "ChatRequest",
+        "description": "Request payload for POST /v1/chat."
+      },
+      "ChatResponse": {
+        "properties": {
+          "reply": {
+            "type": "string",
+            "maxLength": 800,
+            "title": "Reply",
+            "description": "Plain text conversational response"
+          },
+          "picks": {
+            "items": {
+              "$ref": "#/components/schemas/ChatPick"
+            },
+            "type": "array",
+            "title": "Picks",
+            "description": "Curated recommendation cards"
+          },
+          "mode": {
+            "type": "string",
+            "title": "Mode",
+            "description": "Serving mode: 'llm' or 'fallback'"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ChatMeta",
+            "description": "Request metadata and status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reply",
+          "mode",
+          "meta"
+        ],
+        "title": "ChatResponse",
+        "description": "Unified response payload for POST /v1/chat."
+      },
+      "ChatStatusResponse": {
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled",
+            "description": "Whether chat feature flag CHAT_ENABLED is active"
+          },
+          "ready": {
+            "type": "boolean",
+            "title": "Ready",
+            "description": "Whether LLM service has valid credentials ready"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model",
+            "description": "Configured model identifier"
+          }
+        },
+        "type": "object",
+        "required": [
+          "enabled",
+          "ready"
+        ],
+        "title": "ChatStatusResponse",
+        "description": "Response payload for GET /v1/chat/status."
       },
       "ColdStartRequest": {
         "properties": {
