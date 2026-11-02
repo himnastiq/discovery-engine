@@ -102,6 +102,33 @@ Offline evaluation results serve as comparative algorithmic indicators and are n
 
 Detailed metric breakdowns, cold-start degradation curves, and coverage charts are compiled in [`docs/RESULTS.md`](docs/RESULTS.md).
 
+## Discovery Assistant (LLM Concierge)
+
+The dashboard includes **Discovery Assistant**, an optional natural-language concierge that lets users and demo personas ask for recommendations in everyday conversational language across all three domains (Movies, Products, and Articles).
+
+### Architectural Grounding & Non-Goals
+- **LLM-Augmented Concierge, Not a Recommender:** The LLM does **not** rank or score recommendations. Candidate generation and ranking belong 100% to the underlying ML algorithms (SAR for Movies and Products, TF-IDF for Articles). The LLM's role is strictly to select among *engine-provided candidates*, explain why they match the user's taste, and converse naturally.
+- **Zero Hallucinations:** Every item card displayed in the chat panel is hydrated directly from the engine's immutable catalog lookup tables. The LLM cannot invent item IDs, inflate ranking scores, or fabricate attributes.
+- **Data Privacy Boundary:** Only aggregate category affinity shares, active domain context, and candidate item titles are sent to the upstream LLM. Zero raw user IDs, personal details, or sensitive interaction histories are transmitted.
+
+### Upstream Resilience & Quota Management
+- **Project-Aware Quota Management:** Google Gemini rate limits apply per Google Cloud project, not per API key. The backend's `QuotaManager` groups keys by project bucket, implementing health-aware round-robin selection, client-side rate budgets, and exponential backoff.
+- **Graceful Engine Fallback:** Under upstream rate limits (HTTP 429), timeouts, invalid JSON formatting, or network failures, the concierge instantly degrades to an engine-only fallback (`mode: "fallback"`), delivering the engine's top-ranked candidates with an explanatory badge so the chat never fails.
+
+### Environment Configuration
+The concierge is disabled by default in CI (`CHAT_ENABLED=false`) and configured entirely through server-side environment variables:
+
+| Variable | Description | Default |
+|---|---|---|
+| `CHAT_ENABLED` | Global kill switch (`true` / `false`) | `false` |
+| `GEMINI_API_KEYS` | Comma-separated Gemini API keys (never sent to client) | (none) |
+| `GEMINI_KEY_PROJECTS` | Optional project labels for multi-project quota tracking | (none) |
+| `GEMINI_MODEL` | Upstream Gemini model identifier | `gemini-2.5-flash` |
+| `GEMINI_RPM_PER_PROJECT` | Client-side request budget per project bucket | `10` |
+| `CHAT_IP_RPM` | Sliding-window per-IP rate limit | `6` |
+| `CHAT_TIMEOUT_S` | Upstream request timeout in seconds | `8.0` |
+| `CHAT_CACHE_TTL_S` | In-memory response cache TTL | `600` |
+
 ## Testing and Verification Gates
 
 System stability and algorithmic integrity are validated through 11 Conformance Gates (R1 to R11):

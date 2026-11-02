@@ -46,10 +46,10 @@
 | 10 | Integration and robustness audit | 8 | 0 | 0 | 8 | 100% |
 | 11 | Documentation and showcase preparation | 8 | 0 | 0 | 8 | 100% |
 | 12 | Optional stretch (only after Phases 0 to 11 are complete) | 0 | 0 | 0 | 5 | 0% |
-| 13 | Chatbot (LLM concierge) | 25 | 0 | 0 | 30 | 83% |
-| | **Overall** | **149** | | | **159** | **93%** |
+| 13 | Chatbot (LLM concierge) | 26 | 0 | 0 | 30 | 86% |
+| | **Overall** | **150** | | | **159** | **94%** |
 
-`[##################--] 93%  (149/159 tasks)`
+`[##################--] 94%  (150/159 tasks)`
 <!-- PROGRESS:END -->
 
 ---
@@ -753,7 +753,7 @@ What this is: an LLM-augmented concierge over the engine's recommendations. It i
 - [x] **P13.26** Live smoke suite marked `llm_live` (never run in CI, skipped without keys): 20 prompts per content type against the real model; record the rate of invalid ids, fallback rate and latency in `docs/CHATBOT_EVAL.md` (generated from a saved JSON, no hand-typed numbers). *Acceptance:* file exists with the run date, model id and counts.
 - [ ] **P13.27** OPTIONAL: streaming (server-sent events through the Next proxy) with abort support. *Acceptance:* only if time allows; must keep the validation step before display.
 - [ ] **P13.28** OPTIONAL: second `LLMClient` for a local model (for example through Ollama) selectable by config, with the same validator and fallback. *Acceptance:* same contract tests pass with the fake transport.
-- [ ] **P13.29** Docs: README section (what it is, what is sent, limits), About tab, `docs/DEMO_SCRIPT.md` demo flow (one question per content type, one forced fallback), decision records, plan section update. *Acceptance:* all statements match the code (`python tools/verify_claims.py` if present).
+- [x] **P13.29** Docs: README section (what it is, what is sent, limits), About tab, `docs/DEMO_SCRIPT.md` demo flow (one question per content type, one forced fallback), decision records, plan section update. *Acceptance:* all statements match the code (`python tools/verify_claims.py` if present).
 - [ ] **P13.30** Phase 13 gate and "break your own work" ritual: five hypotheses, each tested (an injected item title; an invented id; every key returns 429; a key echoed inside an upstream error body; an oversized conversation), plus a clean-clone CI run (`pytest -m "not real_data and not llm_live"`) and `python tools/check.py`. *Acceptance:* raw outputs in the Session Log.
 
 ---
