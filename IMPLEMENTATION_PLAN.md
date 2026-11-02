@@ -46,10 +46,10 @@
 | 10 | Integration and robustness audit | 8 | 0 | 0 | 8 | 100% |
 | 11 | Documentation and showcase preparation | 8 | 0 | 0 | 8 | 100% |
 | 12 | Optional stretch (only after Phases 0 to 11 are complete) | 0 | 0 | 0 | 5 | 0% |
-| 13 | Chatbot (LLM concierge) | 24 | 0 | 0 | 30 | 80% |
-| | **Overall** | **148** | | | **159** | **93%** |
+| 13 | Chatbot (LLM concierge) | 25 | 0 | 0 | 30 | 83% |
+| | **Overall** | **149** | | | **159** | **93%** |
 
-`[##################--] 93%  (148/159 tasks)`
+`[##################--] 93%  (149/159 tasks)`
 <!-- PROGRESS:END -->
 
 ---
@@ -750,7 +750,7 @@ What this is: an LLM-augmented concierge over the engine's recommendations. It i
 - [x] **P13.25** Frontend tests: MSW fixtures recorded from the real endpoint, component and keyboard tests, a Playwright mobile-viewport screenshot (360 px) and a desktop one. *Acceptance:* `npm run lint`, `type-check`, `test`, `check-secrets` green.
 
 ### 13D. Evaluation, optional work, docs
-- [ ] **P13.26** Live smoke suite marked `llm_live` (never run in CI, skipped without keys): 20 prompts per content type against the real model; record the rate of invalid ids, fallback rate and latency in `docs/CHATBOT_EVAL.md` (generated from a saved JSON, no hand-typed numbers). *Acceptance:* file exists with the run date, model id and counts.
+- [x] **P13.26** Live smoke suite marked `llm_live` (never run in CI, skipped without keys): 20 prompts per content type against the real model; record the rate of invalid ids, fallback rate and latency in `docs/CHATBOT_EVAL.md` (generated from a saved JSON, no hand-typed numbers). *Acceptance:* file exists with the run date, model id and counts.
 - [ ] **P13.27** OPTIONAL: streaming (server-sent events through the Next proxy) with abort support. *Acceptance:* only if time allows; must keep the validation step before display.
 - [ ] **P13.28** OPTIONAL: second `LLMClient` for a local model (for example through Ollama) selectable by config, with the same validator and fallback. *Acceptance:* same contract tests pass with the fake transport.
 - [ ] **P13.29** Docs: README section (what it is, what is sent, limits), About tab, `docs/DEMO_SCRIPT.md` demo flow (one question per content type, one forced fallback), decision records, plan section update. *Acceptance:* all statements match the code (`python tools/verify_claims.py` if present).

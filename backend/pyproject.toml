@@ -64,6 +64,7 @@ markers = [
     "property: marks property-based tests",
     "contract: marks API contract tests",
     "real_data: marks tests that require full/real datasets or trained artifacts",
+    "llm_live: marks tests that query the live LLM API (skipped without keys)",
 ]
 filterwarnings = [
     "ignore::DeprecationWarning:discovery.*",

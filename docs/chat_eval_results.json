@@ -1,0 +1,945 @@
+{
+  "evaluation_date": "2026-11-02T05:31:00.823691+00:00",
+  "model_id": "gemini-2.5-flash-eval",
+  "total_prompts": 60,
+  "total_picks": 180,
+  "fallback_count": 0,
+  "fallback_rate": 0.0,
+  "invalid_ids_count": 0,
+  "invalid_id_rate": 0.0,
+  "latency_stats_ms": {
+    "min": 32.51,
+    "median": 49.74,
+    "p90": 292.04,
+    "p95": 398.71,
+    "max": 1373.27
+  },
+  "per_type_stats": {
+    "movies": {
+      "prompts_count": 20,
+      "picks_count": 60,
+      "fallback_count": 0,
+      "invalid_ids_count": 0,
+      "latency_p50_ms": 36.33,
+      "latency_p95_ms": 94.8
+    },
+    "products": {
+      "prompts_count": 20,
+      "picks_count": 60,
+      "fallback_count": 0,
+      "invalid_ids_count": 0,
+      "latency_p50_ms": 47.45,
+      "latency_p95_ms": 494.45
+    },
+    "articles": {
+      "prompts_count": 20,
+      "picks_count": 60,
+      "fallback_count": 0,
+      "invalid_ids_count": 0,
+      "latency_p50_ms": 242.15,
+      "latency_p95_ms": 1324.62
+    }
+  },
+  "samples": [
+    {
+      "type": "movies",
+      "prompt_idx": 1,
+      "prompt": "Recommend a good mind-bending sci-fi movie",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 97.16,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 93,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 2,
+      "prompt": "Something like The Matrix but lighter and more humorous",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 35.67,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 34,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 3,
+      "prompt": "Classic Pixar animated movie for the family",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 32.51,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 31,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 4,
+      "prompt": "Top critically acclaimed 90s thriller",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 32.9,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 31,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 5,
+      "prompt": "Fast-paced space adventure with great visuals",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 36.34,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 34,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 6,
+      "prompt": "Romantic comedy from the late 90s",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 34.05,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 32,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 7,
+      "prompt": "Dark crime drama with a plot twist",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 35.86,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 34,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 8,
+      "prompt": "Award-winning historical war epic",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 37.05,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 35,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 9,
+      "prompt": "Inspiring sports drama based on true events",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 32.88,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 31,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 10,
+      "prompt": "Cult classic comedy about everyday life",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 33.51,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 32,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 11,
+      "prompt": "High suspense mystery detective film",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 41.75,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 40,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 12,
+      "prompt": "Action movie with incredible stunts and martial arts",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 37.89,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 36,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 13,
+      "prompt": "Heartwarming holiday family film",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 37.38,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 36,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 14,
+      "prompt": "Deep philosophical drama exploring morality",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 36.55,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 35,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 15,
+      "prompt": "Post-apocalyptic survival adventure",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 41.93,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 40,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 16,
+      "prompt": "Coming-of-age movie set in high school",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 36.32,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 35,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 17,
+      "prompt": "Classic courtroom legal drama",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 35.61,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 34,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 18,
+      "prompt": "Chilling supernatural horror film",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 35.89,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 34,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 19,
+      "prompt": "Spy espionage thriller with globe-trotting action",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 50.05,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 48,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "movies",
+      "prompt_idx": 20,
+      "prompt": "Hidden gem indie film with stellar dialogue",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 45.5,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 43,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 1,
+      "prompt": "Recommend top-rated action-adventure games",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 271.83,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 269,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 2,
+      "prompt": "Best multiplayer racing game for family game night",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 62.96,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 61,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 3,
+      "prompt": "Immersive open-world RPG with deep character customization",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 54.42,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 52,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 4,
+      "prompt": "Classic retro platformer with nostalgic music",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 42.98,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 41,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 5,
+      "prompt": "Competitive tactical first-person shooter",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 45.95,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 44,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 6,
+      "prompt": "Relaxing cozy simulation game to unwind after work",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 51.19,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 49,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 7,
+      "prompt": "Challenging puzzle game that tests logic and creativity",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 54.15,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 52,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 8,
+      "prompt": "Top sports simulation game with realistic physics",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 46.98,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 45,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 9,
+      "prompt": "Sci-fi horror survival game set on an abandoned station",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 42.9,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 41,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 10,
+      "prompt": "Great portable game for short commute sessions",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 45.74,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 42,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 11,
+      "prompt": "Historical strategy game with empire building",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 51.22,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 49,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 12,
+      "prompt": "Fast-paced arcade fighter with huge roster",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 46.07,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 44,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 13,
+      "prompt": "Story-driven interactive cinematic adventure",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 39.71,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 38,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 14,
+      "prompt": "Rhythm music game with energetic soundtrack",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 49.44,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 46,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 15,
+      "prompt": "Stealth action game requiring patient planning",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 46.82,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 43,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 16,
+      "prompt": "Fantasy dungeon crawler with great loot systems",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 43.46,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 42,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 17,
+      "prompt": "Engaging space flight and combat simulator",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 50.86,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 49,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 18,
+      "prompt": "Educational puzzle game suitable for young teens",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 506.17,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 504,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 19,
+      "prompt": "Classic point-and-click adventure with witty humor",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 47.92,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 46,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "products",
+      "prompt_idx": 20,
+      "prompt": "High-speed futuristic racing with anti-gravity vehicles",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 42.0,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 39,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 1,
+      "prompt": "Latest breakthroughs in artificial intelligence and machine learning",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 1373.27,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 1371,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 2,
+      "prompt": "Major developments in renewable energy and clean tech",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 265.2,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 263,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 3,
+      "prompt": "Global economic market trends and inflation forecast",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 370.61,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 368,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 4,
+      "prompt": "Recent discoveries in space exploration and astronomy",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 293.62,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 290,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 5,
+      "prompt": "Healthcare innovations and preventive wellness tips",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 322.48,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 320,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 6,
+      "prompt": "Top highlights from recent international football tournaments",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 277.84,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 273,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 7,
+      "prompt": "Cybersecurity threats and enterprise data privacy updates",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 231.82,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 229,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 8,
+      "prompt": "Electric vehicle manufacturing and battery range advancements",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 244.97,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 243,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 9,
+      "prompt": "Deep dive into quantum computing milestones",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 232.94,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 231,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 10,
+      "prompt": "Urban planning and sustainable architecture in major cities",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 235.96,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 234,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 11,
+      "prompt": "Tech startup funding and venture capital landscape",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 238.61,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 237,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 12,
+      "prompt": "Climate change adaptation and ocean conservation efforts",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 242.92,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 241,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 13,
+      "prompt": "Psychology of productivity and remote work best practices",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 255.63,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 253,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 14,
+      "prompt": "Genomics and personalized precision medicine advances",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 239.4,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 237,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 15,
+      "prompt": "Autonomous robotics in supply chain logistics",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 233.15,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 229,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 16,
+      "prompt": "Consumer electronics highlights and upcoming hardware trends",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 221.38,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 220,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 17,
+      "prompt": "Global travel destinations and sustainable tourism guides",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 219.34,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 218,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 18,
+      "prompt": "Financial technology, mobile payments, and digital banking",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 241.37,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 239,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 19,
+      "prompt": "Nutrition science debunking popular diet myths",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 239.17,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 237,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    },
+    {
+      "type": "articles",
+      "prompt_idx": 20,
+      "prompt": "Artificial intelligence ethics, regulation, and governance policies",
+      "mode": "llm",
+      "picks_count": 3,
+      "latency_ms": 400.19,
+      "meta": {
+        "model": "gemini-2.5-flash-eval",
+        "latency_ms": 398,
+        "cache_hit": false,
+        "fallback_reason": null,
+        "retry_after_s": null
+      }
+    }
+  ]
+}

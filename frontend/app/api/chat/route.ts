@@ -1,26 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { proxyToBackend } from '@/lib/server/proxy';
-import {
-  ChatRequestSchema,
-  PickCardSchema,
-  ChatResponseSchema,
-  ChatStatusSchema,
-  ChatStatusResponseSchema,
-  ChatPickSchema,
-  ChatMessageSchema,
-  ChatMetaSchema,
-} from '@/lib/api/schemas';
-
-export {
-  ChatRequestSchema,
-  PickCardSchema,
-  ChatResponseSchema,
-  ChatStatusSchema,
-  ChatStatusResponseSchema,
-  ChatPickSchema,
-  ChatMessageSchema,
-  ChatMetaSchema,
-};
+import { ChatRequestSchema, ChatResponseSchema } from '@/lib/api/schemas';
 
 export async function GET(): Promise<NextResponse> {
   return proxyToBackend('/v1/chat/status');
