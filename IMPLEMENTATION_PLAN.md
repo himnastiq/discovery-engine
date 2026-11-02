@@ -46,10 +46,10 @@
 | 10 | Integration and robustness audit | 8 | 0 | 0 | 8 | 100% |
 | 11 | Documentation and showcase preparation | 8 | 0 | 0 | 8 | 100% |
 | 12 | Optional stretch (only after Phases 0 to 11 are complete) | 0 | 0 | 0 | 5 | 0% |
-| 13 | Chatbot (LLM concierge) | 3 | 0 | 0 | 30 | 10% |
-| | **Overall** | **127** | | | **159** | **79%** |
+| 13 | Chatbot (LLM concierge) | 4 | 0 | 0 | 30 | 13% |
+| | **Overall** | **128** | | | **159** | **80%** |
 
-`[###############-----] 79%  (127/159 tasks)`
+`[################----] 80%  (128/159 tasks)`
 <!-- PROGRESS:END -->
 
 ---
@@ -725,7 +725,7 @@ What this is: an LLM-augmented concierge over the engine's recommendations. It i
 
 ### 13B. Backend (FastAPI, package `backend/engine/llm/`, route in `backend/api/routes/chat.py`)
 - [x] **P13.4** Package skeleton: `LLMClient` protocol (`async complete(request) -> LLMResult`), typed errors (`LLMRateLimited(retry_after)`, `LLMAuthError`, `LLMTimeout`, `LLMUpstreamError`, `LLMBadOutput`). No content-type literals. *Acceptance:* mypy strict clean; `test_generic_types.py` still passes.
-- [ ] **P13.5** `FakeLLMClient` (scripted answers, records prompts, can raise each error type). *Acceptance:* used by all later tests; no network in any non-`llm_live` test.
+- [x] **P13.5** `FakeLLMClient` (scripted answers, records prompts, can raise each error type). *Acceptance:* used by all later tests; no network in any non-`llm_live` test.
 - [ ] **P13.6** `GeminiClient` (async `httpx`): header key, timeout, response schema with the candidate-id enum, token cap, error mapping (429 with retry info, 401/403, 5xx, timeout, malformed JSON). Key never in URL, repr or logs. *Acceptance:* tests with a mocked transport cover each status code; a `caplog` test proves no key material is logged.
 - [ ] **P13.7** `QuotaManager` exactly as section 5, with injectable clock and RNG. *Acceptance:* unit tests (fake clock): round robin across projects; same-project keys collapse into one bucket (no capacity gain); 429 cooldown honours Retry-After and caps backoff with bounded jitter; 401 disables; all-cooling returns `None` with earliest ready time; limiter blocks at RPM; concurrent callers (asyncio) never exceed the limit; hypothesis test for state invariants.
 - [ ] **P13.8** Settings loader for the env vars of section 4.4 with validation (key/project length mismatch is an error; unknown values fail loudly). Startup log shows only counts. *Acceptance:* tests for valid/invalid configs; nothing secret logged.

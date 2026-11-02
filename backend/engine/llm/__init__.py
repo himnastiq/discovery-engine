@@ -10,6 +10,7 @@ from engine.llm.errors import (
     LLMTimeout,
     LLMUpstreamError,
 )
+from engine.llm.fake import FakeLLMClient
 from engine.llm.types import (
     LLMClient,
     LLMPick,
@@ -18,6 +19,7 @@ from engine.llm.types import (
 )
 
 __all__ = [
+    "FakeLLMClient",
     "LLMAuthError",
     "LLMBadOutput",
     "LLMClient",
