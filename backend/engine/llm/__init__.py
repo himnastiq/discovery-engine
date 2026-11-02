@@ -11,6 +11,7 @@ from engine.llm.errors import (
     LLMUpstreamError,
 )
 from engine.llm.fake import FakeLLMClient
+from engine.llm.gemini import GeminiClient
 from engine.llm.types import (
     LLMClient,
     LLMPick,
@@ -20,6 +21,7 @@ from engine.llm.types import (
 
 __all__ = [
     "FakeLLMClient",
+    "GeminiClient",
     "LLMAuthError",
     "LLMBadOutput",
     "LLMClient",
