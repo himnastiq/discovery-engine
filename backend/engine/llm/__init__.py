@@ -12,6 +12,7 @@ from engine.llm.errors import (
 )
 from engine.llm.fake import FakeLLMClient
 from engine.llm.gemini import GeminiClient
+from engine.llm.quota import QuotaManager
 from engine.llm.types import (
     LLMClient,
     LLMPick,
@@ -32,4 +33,5 @@ __all__ = [
     "LLMResult",
     "LLMTimeout",
     "LLMUpstreamError",
+    "QuotaManager",
 ]
