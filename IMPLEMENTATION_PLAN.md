@@ -46,10 +46,10 @@
 | 10 | Integration and robustness audit | 8 | 0 | 0 | 8 | 100% |
 | 11 | Documentation and showcase preparation | 8 | 0 | 0 | 8 | 100% |
 | 12 | Optional stretch (only after Phases 0 to 11 are complete) | 0 | 0 | 0 | 5 | 0% |
-| 13 | Chatbot (LLM concierge) | 15 | 0 | 0 | 30 | 50% |
-| | **Overall** | **139** | | | **159** | **87%** |
+| 13 | Chatbot (LLM concierge) | 16 | 0 | 0 | 30 | 53% |
+| | **Overall** | **140** | | | **159** | **88%** |
 
-`[#################---] 87%  (139/159 tasks)`
+`[#################---] 88%  (140/159 tasks)`
 <!-- PROGRESS:END -->
 
 ---
@@ -737,7 +737,7 @@ What this is: an LLM-augmented concierge over the engine's recommendations. It i
 - [x] **P13.14** `POST /v1/chat` and `GET /v1/chat/status` with pydantic schemas, the limits of section 4.1, per-IP sliding-window limit with `Retry-After`, kill switch (`CHAT_ENABLED`). Items in the response are built from the **catalogue lookups**, never from model text. *Acceptance:* contract tests with the fake client for all three types and all error paths.
 - [x] **P13.15** Regenerate `backend/api/openapi.json`; update `docs/CONFORMANCE.md` (R12 row); keep the openapi test green. *Acceptance:* `python tools/check_conformance.py --check` passes.
 - [x] **P13.16** Safety tests (gate R12): prompt-injection fixtures (item titles such as "Ignore previous instructions and ..."), model returning an id outside the candidates, model returning markup/URLs, oversize output, empty candidate set. *Acceptance:* all produce a validated answer or a fallback, never an item outside the catalogue.
-- [ ] **P13.17** Performance and resource check: with the fake client, `/v1/chat` adds under 50 ms p95 over the engine calls; the LLM call is async and does not block other endpoints (a concurrent `/v1/recommend` load test stays within its budget). *Acceptance:* numbers recorded in `docs/RESULTS.md` (generated section).
+- [x] **P13.17** Performance and resource check: with the fake client, `/v1/chat` adds under 50 ms p95 over the engine calls; the LLM call is async and does not block other endpoints (a concurrent `/v1/recommend` load test stays within its budget). *Acceptance:* numbers recorded in `docs/RESULTS.md` (generated section).
 
 ### 13C. Frontend (Next.js)
 - [ ] **P13.18** Route handler `frontend/app/api/chat/route.ts`: **proxy only** to FastAPI via the server-only `API_BASE_URL`; zod-validate request and response; forward `Retry-After`; no Gemini code or keys in the frontend. Extend `scripts/check_bundle_secrets.mjs` to fail on `GEMINI`, `AIza` and `NEXT_PUBLIC_GEMINI`. *Acceptance:* `npm run check-secrets` passes; a deliberate leak fixture fails it.
