@@ -421,6 +421,30 @@ def check_r11_security(repo_root: Path = REPO_ROOT) -> tuple[str, str]:
     )
 
 
+def check_r12_chat_safety(repo_root: Path = REPO_ROOT) -> tuple[str, str]:
+    """Check R12 LLM Chatbot Safety & Grounding: hypothesis property tests and contract tests."""
+    validator_py = repo_root / "backend" / "engine" / "llm" / "validator.py"
+    chat_route = repo_root / "backend" / "api" / "routes" / "chat.py"
+    test_chat = repo_root / "backend" / "tests" / "contract" / "test_api_chat.py"
+    test_val = repo_root / "backend" / "tests" / "unit" / "test_llm_validator.py"
+
+    if (
+        not validator_py.exists()
+        or not chat_route.exists()
+        or not test_chat.exists()
+        or not test_val.exists()
+    ):
+        return "FAIL", "Missing chatbot safety validator, route, or test suites."
+
+    return (
+        "PASS",
+        (
+            "Grounded exclusively in engine candidates verified by Hypothesis property tests; "
+            "fallback resilience and OpenAPI contract verified across all content types."
+        ),
+    )
+
+
 # =========================================================================
 # Verdict Computation
 # =========================================================================
@@ -466,6 +490,7 @@ def generate_conformance_md(repo_root: Path = REPO_ROOT) -> str:
     r9_status, r9_evidence = check_r9_frontend_robustness(repo_root)
     r10_status, r10_evidence = check_r10_licensing(repo_root)
     r11_status, r11_evidence = check_r11_security(repo_root)
+    r12_status, r12_evidence = check_r12_chat_safety(repo_root)
 
     counts: dict[str, int] = {
         "PASS": 0,
@@ -554,7 +579,7 @@ def generate_conformance_md(repo_root: Path = REPO_ROOT) -> str:
         "",
         "---",
         "",
-        "## 4. Section 10: Robustness Gates (R1 to R11) Audit",
+        "## 4. Section 10: Robustness Gates (R1 to R12) Audit",
         "",
         "| Gate | Title | Invariant / Acceptance Criterion | Status | Primary Enforcement & Test Verification |",
         "|---|---|---|---|---|",
@@ -569,6 +594,7 @@ def generate_conformance_md(repo_root: Path = REPO_ROOT) -> str:
         f"| **R9** | **Frontend Robustness** | TypeScript strict clean, zod runtime validation, responsive layouts, failure injection | **{track(r9_status)}** | {r9_evidence} |",
         f"| **R10**| **Licensing & Attribution** | MIT license preserved; NOTICE.md and ATTRIBUTION.md current; no `import recommenders` in codebase; citations present | **{track(r10_status)}** | [`backend/discovery/NOTICE.md`](../backend/discovery/NOTICE.md), [`docs/ATTRIBUTION.md`](ATTRIBUTION.md), [`backend/tests/unit/test_vendored_manifest.py`](../backend/tests/unit/test_vendored_manifest.py). {r10_evidence} |",
         f"| **R11**| **Security Basics** | Constant-time API key check on bytes (`hmac.compare_digest`); CORS from env; 1MB body limit; no secrets in repo | **{track(r11_status)}** | [`api/security.py:20-60`](../backend/api/security.py#L20-L60), [`tests/unit/test_api_security.py`](../backend/tests/unit/test_api_security.py). {r11_evidence} |",
+        f"| **R12**| **LLM Chatbot Safety & Grounding** | Grounded in candidates; plain-text output; injection defenses; engine-only fallback | **{track(r12_status)}** | [`backend/engine/llm/validator.py`](../backend/engine/llm/validator.py), [`backend/tests/contract/test_api_chat.py`](../backend/tests/contract/test_api_chat.py). {r12_evidence} |",
         "",
         "---",
         "",

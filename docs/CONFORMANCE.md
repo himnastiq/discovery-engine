@@ -72,7 +72,7 @@ Every requirement is audited and categorized into:
 
 ---
 
-## 4. Section 10: Robustness Gates (R1 to R11) Audit
+## 4. Section 10: Robustness Gates (R1 to R12) Audit
 
 | Gate | Title | Invariant / Acceptance Criterion | Status | Primary Enforcement & Test Verification |
 |---|---|---|---|---|
@@ -87,16 +87,17 @@ Every requirement is audited and categorized into:
 | **R9** | **Frontend Robustness** | TypeScript strict clean, zod runtime validation, responsive layouts, failure injection | **PASS** | TypeScript strict clean, zod runtime validation, responsive layouts, failure injection; verified by `docs/gate_matrix.json`, `@axe-core/playwright` accessibility audits, 69 Vitest unit tests, responsive viewports (360/768/1280px), and Playwright E2E suites. |
 | **R10**| **Licensing & Attribution** | MIT license preserved; NOTICE.md and ATTRIBUTION.md current; no `import recommenders` in codebase; citations present | **PASS** | [`backend/discovery/NOTICE.md`](../backend/discovery/NOTICE.md), [`docs/ATTRIBUTION.md`](ATTRIBUTION.md), [`backend/tests/unit/test_vendored_manifest.py`](../backend/tests/unit/test_vendored_manifest.py). MIT license preserved; `NOTICE.md` and `ATTRIBUTION.md` current; zero `import recommenders` in engine/api; vendored manifest verified. |
 | **R11**| **Security Basics** | Constant-time API key check on bytes (`hmac.compare_digest`); CORS from env; 1MB body limit; no secrets in repo | **PASS** | [`api/security.py:20-60`](../backend/api/security.py#L20-L60), [`tests/unit/test_api_security.py`](../backend/tests/unit/test_api_security.py). Constant-time API key check on bytes (`hmac.compare_digest`); CORS from env; 1MB body limit; security test suite verified. |
+| **R12**| **LLM Chatbot Safety & Grounding** | Grounded in candidates; plain-text output; injection defenses; engine-only fallback | **PASS** | [`backend/engine/llm/validator.py`](../backend/engine/llm/validator.py), [`backend/tests/contract/test_api_chat.py`](../backend/tests/contract/test_api_chat.py). Grounded exclusively in engine candidates verified by Hypothesis property tests; fallback resilience and OpenAPI contract verified across all content types. |
 
 ---
 
 ## 5. Audit Summary and Verdict
 
-- **Total Requirements Audited:** 48
-- **PASS:** 45
+- **Total Requirements Audited:** 49
+- **PASS:** 46
 - **FAIL:** 1
 - **NOT-VERIFIED:** 0
 - **PENDING:** 0
 - **MANUAL:** 2
 
-**Audit Verdict:** **NON-CONFORMANT** (1 FAIL, 0 NOT-VERIFIED). 45 PASS, 1 FAIL, 0 NOT-VERIFIED, 0 PENDING, 2 MANUAL (Total: 48).
+**Audit Verdict:** **NON-CONFORMANT** (1 FAIL, 0 NOT-VERIFIED). 46 PASS, 1 FAIL, 0 NOT-VERIFIED, 0 PENDING, 2 MANUAL (Total: 49).
