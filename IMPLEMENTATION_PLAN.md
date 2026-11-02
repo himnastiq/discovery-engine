@@ -46,10 +46,10 @@
 | 10 | Integration and robustness audit | 8 | 0 | 0 | 8 | 100% |
 | 11 | Documentation and showcase preparation | 8 | 0 | 0 | 8 | 100% |
 | 12 | Optional stretch (only after Phases 0 to 11 are complete) | 0 | 0 | 0 | 5 | 0% |
-| 13 | Chatbot (LLM concierge) | 19 | 0 | 0 | 30 | 63% |
-| | **Overall** | **143** | | | **159** | **89%** |
+| 13 | Chatbot (LLM concierge) | 20 | 0 | 0 | 30 | 66% |
+| | **Overall** | **144** | | | **159** | **90%** |
 
-`[#################---] 89%  (143/159 tasks)`
+`[##################--] 90%  (144/159 tasks)`
 <!-- PROGRESS:END -->
 
 ---
@@ -743,7 +743,7 @@ What this is: an LLM-augmented concierge over the engine's recommendations. It i
 - [x] **P13.18** Route handler `frontend/app/api/chat/route.ts`: **proxy only** to FastAPI via the server-only `API_BASE_URL`; zod-validate request and response; forward `Retry-After`; no Gemini code or keys in the frontend. Extend `scripts/check_bundle_secrets.mjs` to fail on `GEMINI`, `AIza` and `NEXT_PUBLIC_GEMINI`. *Acceptance:* `npm run check-secrets` passes; a deliberate leak fixture fails it.
 - [x] **P13.19** Generated TypeScript types from the new `openapi.json` and zod schemas for the chat response. *Acceptance:* contract test between zod and OpenAPI types.
 - [x] **P13.20** `ChatPanel` component: `role="dialog"` with `aria-modal`, focus trap and Escape (reuse the ItemDrawer logic), focus returns to the launcher, an `aria-live="polite"` message log, theme tokens only (no hard-coded hex), WCAG AA contrast, `prefers-reduced-motion`, mobile full-height sheet using `100dvh` and safe-area insets. *Acceptance:* axe has no serious violations; keyboard-only test passes.
-- [ ] **P13.21** Message and card rendering: plain text paragraphs only; `PickCard` built from the catalogue fields (title, subtitle, category chips, engine rank); "View item" opens the existing `ItemDrawer`; poster only if the existing hook provides one. *Acceptance:* a test with a malicious reply string (HTML and script tags) renders as text.
+- [x] **P13.21** Message and card rendering: plain text paragraphs only; `PickCard` built from the catalogue fields (title, subtitle, category chips, engine rank); "View item" opens the existing `ItemDrawer`; poster only if the existing hook provides one. *Acceptance:* a test with a malicious reply string (HTML and script tags) renders as text.
 - [ ] **P13.22** Starter prompt chips come from the `chat:` config via the API (not hard-coded per type). *Acceptance:* chips change with the content type in a component test.
 - [ ] **P13.23** States: not configured (`/status` not ready: friendly onboarding without asking for a key), loading, rate-limited (shows the retry time), fallback badge ("answer from the engine"), error with retry, Stop button (abort), clear conversation (in memory only), "AI-generated, may be wrong" notice. *Acceptance:* one test per state.
 - [ ] **P13.24** "Ask AI" button in `AppHeader` and a floating launcher (no pulse animation); `AIInsights.tsx` untouched (its tests still pass unchanged). *Acceptance:* git diff shows no change to `AIInsights.tsx`.
