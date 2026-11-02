@@ -31,6 +31,14 @@ evaluation:
 serving:
   top_neighbors_per_item: 50
   max_items_in_similarity: 8000
+chat:
+  noun: movie
+  card_fields: [title, subtitle, categories, year]
+  starter_prompts:
+    - "Suggest movies based on my taste profile"
+    - "What should I watch if I liked The Matrix?"
+    - "Recommend top 90s sci-fi movies"
+  persona_wording: "movie viewing history and genre affinities"
 fast:
   dataset:
     variant: "100k"

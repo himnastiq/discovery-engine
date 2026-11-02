@@ -29,3 +29,9 @@ evaluation:
 serving:
   top_neighbors_per_item: 10
   max_items_in_similarity: 100
+chat:
+  noun: item
+  card_fields: [title, subtitle, categories]
+  starter_prompts:
+    - "Suggest items matching my taste"
+  persona_wording: "interaction history"

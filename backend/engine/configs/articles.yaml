@@ -33,6 +33,14 @@ serving:
   top_neighbors_per_item: 50
   max_items_in_similarity: 8000
   recency_window: 86400
+chat:
+  noun: article
+  card_fields: [title, subtitle, categories]
+  starter_prompts:
+    - "Summarize top news matching my interests"
+    - "What are the latest tech breakthroughs?"
+    - "Find sports stories from today"
+  persona_wording: "reading history and topic interests"
 fast:
   dataset:
     variant: "small"

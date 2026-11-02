@@ -232,6 +232,30 @@ class ServingConfig(SchemaBase):
     )
 
 
+class ChatConfig(SchemaBase):
+    """Configuration for domain-specific conversational assistant concierge."""
+
+    noun: str = Field(
+        default="item", description="Domain item noun (e.g. 'movie', 'product', 'article')"
+    )
+    card_fields: list[str] = Field(
+        default_factory=lambda: ["title", "subtitle", "categories", "year"],
+        description="Metadata fields to display in chat recommendation pick cards",
+    )
+    starter_prompts: list[str] = Field(
+        default_factory=lambda: [
+            "Suggest top recommendations based on my profile",
+            "What hidden gems do you recommend?",
+            "Explain why these items match my taste",
+        ],
+        description="Starter prompt chips shown in the chat panel",
+    )
+    persona_wording: str = Field(
+        default="taste preferences and history",
+        description="Descriptive wording of the user persona/taste for system prompts",
+    )
+
+
 class ContentTypeSpec(SchemaBase):
     """Top-level specification for a content type loaded from YAML."""
 
@@ -248,6 +272,7 @@ class ContentTypeSpec(SchemaBase):
     model: ModelConfig
     evaluation: EvaluationConfig = Field(default_factory=EvaluationConfig)
     serving: ServingConfig = Field(default_factory=ServingConfig)
+    chat: ChatConfig = Field(default_factory=ChatConfig)
     fast: dict[str, Any] | None = Field(
         default=None, description="Optional overrides applied in --fast mode"
     )

@@ -32,6 +32,14 @@ evaluation:
 serving:
   top_neighbors_per_item: 50
   max_items_in_similarity: 8000
+chat:
+  noun: product
+  card_fields: [title, subtitle, categories]
+  starter_prompts:
+    - "Find popular video games matching my taste"
+    - "Recommend top-rated retro gaming gear"
+    - "What games are similar to Super Mario?"
+  persona_wording: "shopping history and category affinities"
 fast:
   dataset:
     variant: "instruments"

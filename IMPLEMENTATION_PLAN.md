@@ -46,10 +46,10 @@
 | 10 | Integration and robustness audit | 8 | 0 | 0 | 8 | 100% |
 | 11 | Documentation and showcase preparation | 8 | 0 | 0 | 8 | 100% |
 | 12 | Optional stretch (only after Phases 0 to 11 are complete) | 0 | 0 | 0 | 5 | 0% |
-| 13 | Chatbot (LLM concierge) | 7 | 0 | 0 | 30 | 23% |
-| | **Overall** | **131** | | | **159** | **82%** |
+| 13 | Chatbot (LLM concierge) | 8 | 0 | 0 | 30 | 26% |
+| | **Overall** | **132** | | | **159** | **83%** |
 
-`[################----] 82%  (131/159 tasks)`
+`[################----] 83%  (132/159 tasks)`
 <!-- PROGRESS:END -->
 
 ---
@@ -729,7 +729,7 @@ What this is: an LLM-augmented concierge over the engine's recommendations. It i
 - [x] **P13.6** `GeminiClient` (async `httpx`): header key, timeout, response schema with the candidate-id enum, token cap, error mapping (429 with retry info, 401/403, 5xx, timeout, malformed JSON). Key never in URL, repr or logs. *Acceptance:* tests with a mocked transport cover each status code; a `caplog` test proves no key material is logged.
 - [x] **P13.7** `QuotaManager` exactly as section 5, with injectable clock and RNG. *Acceptance:* unit tests (fake clock): round robin across projects; same-project keys collapse into one bucket (no capacity gain); 429 cooldown honours Retry-After and caps backoff with bounded jitter; 401 disables; all-cooling returns `None` with earliest ready time; limiter blocks at RPM; concurrent callers (asyncio) never exceed the limit; hypothesis test for state invariants.
 - [x] **P13.8** Settings loader for the env vars of section 4.4 with validation (key/project length mismatch is an error; unknown values fail loudly). Startup log shows only counts. *Acceptance:* tests for valid/invalid configs; nothing secret logged.
-- [ ] **P13.9** `chat:` section in `ContentTypeSpec` (noun, card fields, starter prompts, persona wording) with defaults, plus a prompt builder: system prompt, delimited data blocks, injection warning, profile aggregates only. *Acceptance:* snapshot test of the prompt for each type; test that no raw user id and no secret appears; no content-type literals in engine code.
+- [x] **P13.9** `chat:` section in `ContentTypeSpec` (noun, card fields, starter prompts, persona wording) with defaults, plus a prompt builder: system prompt, delimited data blocks, injection warning, profile aggregates only. *Acceptance:* snapshot test of the prompt for each type; test that no raw user id and no secret appears; no content-type literals in engine code.
 - [ ] **P13.10** Candidate assembly: personalised top-20 (popular if the user is unknown or cold), popular top-10, search hits for the last user message (top-10), dedupe, cap 40, stable order. *Acceptance:* tests for known user, unknown user, empty message hits, dedupe, cap.
 - [ ] **P13.11** Output validator: JSON parse, picks must be a subset of the candidates, dedupe, at most 5, reason at most 200 chars and reply at most 800 chars, markup and URLs stripped. Anything else raises `LLMBadOutput`. *Acceptance:* hypothesis test: for arbitrary model output the validated picks are **always** a subset of the candidate ids.
 - [ ] **P13.12** Fallback builder: engine-only picks with a templated reply; `mode="fallback"` plus a `fallback_reason`. *Acceptance:* every failure type of the fake client yields HTTP 200 with a valid fallback body.
