@@ -46,10 +46,10 @@
 | 10 | Integration and robustness audit | 8 | 0 | 0 | 8 | 100% |
 | 11 | Documentation and showcase preparation | 8 | 0 | 0 | 8 | 100% |
 | 12 | Optional stretch (only after Phases 0 to 11 are complete) | 0 | 0 | 0 | 5 | 0% |
-| 13 | Chatbot (LLM concierge) | 11 | 0 | 0 | 30 | 36% |
-| | **Overall** | **135** | | | **159** | **84%** |
+| 13 | Chatbot (LLM concierge) | 12 | 0 | 0 | 30 | 40% |
+| | **Overall** | **136** | | | **159** | **85%** |
 
-`[################----] 84%  (135/159 tasks)`
+`[#################---] 85%  (136/159 tasks)`
 <!-- PROGRESS:END -->
 
 ---
@@ -733,7 +733,7 @@ What this is: an LLM-augmented concierge over the engine's recommendations. It i
 - [x] **P13.10** Candidate assembly: personalised top-20 (popular if the user is unknown or cold), popular top-10, search hits for the last user message (top-10), dedupe, cap 40, stable order. *Acceptance:* tests for known user, unknown user, empty message hits, dedupe, cap.
 - [x] **P13.11** Output validator: JSON parse, picks must be a subset of the candidates, dedupe, at most 5, reason at most 200 chars and reply at most 800 chars, markup and URLs stripped. Anything else raises `LLMBadOutput`. *Acceptance:* hypothesis test: for arbitrary model output the validated picks are **always** a subset of the candidate ids.
 - [x] **P13.12** Fallback builder: engine-only picks with a templated reply; `mode="fallback"` plus a `fallback_reason`. *Acceptance:* every failure type of the fake client yields HTTP 200 with a valid fallback body.
-- [ ] **P13.13** Response cache (TTL LRU keyed by type, user, normalised last message, candidate ids and model) and coalescing of identical in-flight requests. *Acceptance:* tests: second call is a cache hit with zero upstream calls; 5 concurrent identical requests make 1 upstream call.
+- [x] **P13.13** Response cache (TTL LRU keyed by type, user, normalised last message, candidate ids and model) and coalescing of identical in-flight requests. *Acceptance:* tests: second call is a cache hit with zero upstream calls; 5 concurrent identical requests make 1 upstream call.
 - [ ] **P13.14** `POST /v1/chat` and `GET /v1/chat/status` with pydantic schemas, the limits of section 4.1, per-IP sliding-window limit with `Retry-After`, kill switch (`CHAT_ENABLED`). Items in the response are built from the **catalogue lookups**, never from model text. *Acceptance:* contract tests with the fake client for all three types and all error paths.
 - [ ] **P13.15** Regenerate `backend/api/openapi.json`; update `docs/CONFORMANCE.md` (R12 row); keep the openapi test green. *Acceptance:* `python tools/check_conformance.py --check` passes.
 - [ ] **P13.16** Safety tests (gate R12): prompt-injection fixtures (item titles such as "Ignore previous instructions and ..."), model returning an id outside the candidates, model returning markup/URLs, oversize output, empty candidate set. *Acceptance:* all produce a validated answer or a fallback, never an item outside the catalogue.
