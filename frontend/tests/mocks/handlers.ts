@@ -4,8 +4,18 @@ import usersMoviesFixture from '../fixtures/users_movies.json';
 import profileMovies1Fixture from '../fixtures/profile_movies_1.json';
 import recommendMovies1Fixture from '../fixtures/recommend_movies_1.json';
 import aboutFixture from '../fixtures/about.json';
+import chatStatusFixture from '../fixtures/chat_status.json';
+import chatResponseFixture from '../fixtures/chat_response.json';
 
 export const handlers = [
+  http.get('/api/chat', () => {
+    return HttpResponse.json(chatStatusFixture);
+  }),
+
+  http.post('/api/chat', () => {
+    return HttpResponse.json(chatResponseFixture);
+  }),
+
   http.get('/api/types', () => {
     return HttpResponse.json(typesFixture);
   }),

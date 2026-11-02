@@ -5,8 +5,27 @@ import profileFixture from '../../fixtures/profile_movies_1.json' with { type: '
 import recommendFixture from '../../fixtures/recommend_movies_1.json' with { type: 'json' };
 import metricsFixture from '../../fixtures/metrics_movies.json' with { type: 'json' };
 import aboutFixture from '../../fixtures/about.json' with { type: 'json' };
+import chatStatusFixture from '../../fixtures/chat_status.json' with { type: 'json' };
+import chatResponseFixture from '../../fixtures/chat_response.json' with { type: 'json' };
 
 export async function setupMockApi(page: Page) {
+  // Chat endpoints (Phase 13)
+  await page.route('**/api/chat', async (route) => {
+    if (route.request().method() === 'POST') {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(chatResponseFixture),
+      });
+    } else {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(chatStatusFixture),
+      });
+    }
+  });
+
   // Types endpoint
   await page.route('**/api/types', async (route) => {
     await route.fulfill({

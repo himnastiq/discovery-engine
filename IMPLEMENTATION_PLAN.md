@@ -46,10 +46,10 @@
 | 10 | Integration and robustness audit | 8 | 0 | 0 | 8 | 100% |
 | 11 | Documentation and showcase preparation | 8 | 0 | 0 | 8 | 100% |
 | 12 | Optional stretch (only after Phases 0 to 11 are complete) | 0 | 0 | 0 | 5 | 0% |
-| 13 | Chatbot (LLM concierge) | 23 | 0 | 0 | 30 | 76% |
-| | **Overall** | **147** | | | **159** | **92%** |
+| 13 | Chatbot (LLM concierge) | 24 | 0 | 0 | 30 | 80% |
+| | **Overall** | **148** | | | **159** | **93%** |
 
-`[##################--] 92%  (147/159 tasks)`
+`[##################--] 93%  (148/159 tasks)`
 <!-- PROGRESS:END -->
 
 ---
@@ -747,7 +747,7 @@ What this is: an LLM-augmented concierge over the engine's recommendations. It i
 - [x] **P13.22** Starter prompt chips come from the `chat:` config via the API (not hard-coded per type). *Acceptance:* chips change with the content type in a component test.
 - [x] **P13.23** States: not configured (`/status` not ready: friendly onboarding without asking for a key), loading, rate-limited (shows the retry time), fallback badge ("answer from the engine"), error with retry, Stop button (abort), clear conversation (in memory only), "AI-generated, may be wrong" notice. *Acceptance:* one test per state.
 - [x] **P13.24** "Ask AI" button in `AppHeader` and a floating launcher (no pulse animation); `AIInsights.tsx` untouched (its tests still pass unchanged). *Acceptance:* git diff shows no change to `AIInsights.tsx`.
-- [ ] **P13.25** Frontend tests: MSW fixtures recorded from the real endpoint, component and keyboard tests, a Playwright mobile-viewport screenshot (360 px) and a desktop one. *Acceptance:* `npm run lint`, `type-check`, `test`, `check-secrets` green.
+- [x] **P13.25** Frontend tests: MSW fixtures recorded from the real endpoint, component and keyboard tests, a Playwright mobile-viewport screenshot (360 px) and a desktop one. *Acceptance:* `npm run lint`, `type-check`, `test`, `check-secrets` green.
 
 ### 13D. Evaluation, optional work, docs
 - [ ] **P13.26** Live smoke suite marked `llm_live` (never run in CI, skipped without keys): 20 prompts per content type against the real model; record the rate of invalid ids, fallback rate and latency in `docs/CHATBOT_EVAL.md` (generated from a saved JSON, no hand-typed numbers). *Acceptance:* file exists with the run date, model id and counts.
