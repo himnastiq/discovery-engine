@@ -20,44 +20,53 @@ def test_live_chat_smoke_grounding() -> None:
     if not settings.enabled or not settings.api_keys:
         pytest.skip("Live LLM test skipped: CHAT_ENABLED=false or GEMINI_API_KEYS not set.")
 
-    client = TestClient(app)
+    with TestClient(app) as client:
+        # 1. Verify status endpoint reports ready
+        status_resp = client.get("/v1/chat/status")
+        assert status_resp.status_code == 200
+        status_data = status_resp.json()
+        assert status_data["enabled"] is True
+        assert status_data["ready"] is True
 
-    # 1. Verify status endpoint reports ready
-    status_resp = client.get("/v1/chat/status")
-    assert status_resp.status_code == 200
-    status_data = status_resp.json()
-    assert status_data["enabled"] is True
-    assert status_data["ready"] is True
+        # 2. Test live prompts across registered content types
+        test_queries = [
+            ("movies", "Suggest top 90s science fiction movies"),
+            ("products", "Recommend popular retro gaming titles"),
+            ("articles", "Summarize latest machine learning breakthroughs"),
+        ]
 
-    # 2. Test live prompts across registered content types
-    test_queries = [
-        ("movies", "Suggest top 90s science fiction movies"),
-        ("products", "Recommend popular retro gaming titles"),
-        ("articles", "Summarize latest machine learning breakthroughs"),
-    ]
+        lookups_dict = getattr(app.state, "lookups", {})
+        artifacts = getattr(app.state, "artifacts", {})
 
-    artifacts = getattr(app.state, "artifacts", {})
+        for ctype, query in test_queries:
+            resp = client.post(
+                "/v1/chat",
+                json={
+                    "type": ctype,
+                    "user_id": None,
+                    "messages": [{"role": "user", "content": query}],
+                },
+            )
+            assert resp.status_code == 200, f"Live query failed for {ctype}: {resp.text}"
+            data = resp.json()
 
-    for ctype, query in test_queries:
-        resp = client.post(
-            "/v1/chat",
-            json={
-                "type": ctype,
-                "user_id": None,
-                "messages": [{"role": "user", "content": query}],
-            },
-        )
-        assert resp.status_code == 200, f"Live query failed for {ctype}: {resp.text}"
-        data = resp.json()
+            assert "reply" in data
+            assert len(data["reply"]) > 0
+            assert data["mode"] in ("llm", "fallback")
+            assert "picks" in data
 
-        assert "reply" in data
-        assert len(data["reply"]) > 0
-        assert data["mode"] in ("llm", "fallback")
-        assert "picks" in data
+            # Grounding check: verify all picks belong to engine catalogue
+            if ctype in lookups_dict:
+                valid_ids = lookups_dict[ctype].catalogue_ids
+            elif ctype in artifacts:
+                items_df = artifacts[ctype].items
+                if "item_id" in items_df.columns:
+                    valid_ids = set(items_df["item_id"].astype(str))
+                else:
+                    valid_ids = set(items_df.index.astype(str))
+            else:
+                valid_ids = set()
 
-        # Grounding check: verify all picks belong to engine catalogue
-        if ctype in artifacts:
-            valid_ids = set(artifacts[ctype].items.index.astype(str))
             for pick in data["picks"]:
                 assert str(pick["item_id"]) in valid_ids, (
                     f"Pick ID {pick['item_id']} not found in {ctype} catalogue!"

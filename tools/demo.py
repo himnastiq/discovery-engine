@@ -26,6 +26,13 @@ FRONTEND_DIR = REPO_ROOT / "frontend"
 DEMO_DIR = REPO_ROOT / ".demo"
 PIDS_FILE = DEMO_DIR / "pids.json"
 
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv(REPO_ROOT / ".env")
+except (ImportError, OSError):
+    pass
+
 
 def get_python_executable() -> str:
     """Find the active or virtualenv Python binary."""

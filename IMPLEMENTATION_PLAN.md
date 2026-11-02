@@ -46,10 +46,10 @@
 | 10 | Integration and robustness audit | 8 | 0 | 0 | 8 | 100% |
 | 11 | Documentation and showcase preparation | 8 | 0 | 0 | 8 | 100% |
 | 12 | Optional stretch (only after Phases 0 to 11 are complete) | 0 | 0 | 0 | 5 | 0% |
-| 13 | Chatbot (LLM concierge) | 26 | 0 | 0 | 30 | 86% |
-| | **Overall** | **150** | | | **159** | **94%** |
+| 13 | Chatbot (LLM concierge) | 28 | 0 | 0 | 30 | 93% |
+| | **Overall** | **152** | | | **159** | **95%** |
 
-`[##################--] 94%  (150/159 tasks)`
+`[###################-] 95%  (152/159 tasks)`
 <!-- PROGRESS:END -->
 
 ---
@@ -720,7 +720,7 @@ What this is: an LLM-augmented concierge over the engine's recommendations. It i
 
 ### 13A. Decisions and prerequisites
 - [x] **P13.1** Write decision record D-036: scope ("LLM-augmented concierge", not an LLM ranker), provider and model chosen via env, the per-project quota fact and the multi-project policy of section 5, data sent to the provider, free-tier data-use terms (looked up in the current terms), chat implemented in FastAPI. *Acceptance:* entry in `docs/DECISIONS.md` citing the documentation pages consulted.
-- [ ] **P13.2** HUMAN: create the key(s) and set `GEMINI_API_KEYS`, `GEMINI_MODEL` (and `GEMINI_KEY_PROJECTS` only if keys really come from different owned projects) in the backend environment; confirm the current model id and tier limits in AI Studio. *Acceptance:* human confirms; the agent never sees a key value.
+- [x] **P13.2** HUMAN: create the key(s) and set `GEMINI_API_KEYS`, `GEMINI_MODEL` (and `GEMINI_KEY_PROJECTS` only if keys really come from different owned projects) in the backend environment; confirm the current model id and tier limits in AI Studio. *Acceptance:* human confirms; the agent never sees a key value.
 - [x] **P13.3** Update `docs/DATASETS.md`, `docs/ATTRIBUTION.md` and the About tab text with what data is sent to the provider and the AI-generated-content notice. *Acceptance:* text reviewed against the actual prompt builder output (P13.9).
 
 ### 13B. Backend (FastAPI, package `backend/engine/llm/`, route in `backend/api/routes/chat.py`)
@@ -754,7 +754,7 @@ What this is: an LLM-augmented concierge over the engine's recommendations. It i
 - [ ] **P13.27** OPTIONAL: streaming (server-sent events through the Next proxy) with abort support. *Acceptance:* only if time allows; must keep the validation step before display.
 - [ ] **P13.28** OPTIONAL: second `LLMClient` for a local model (for example through Ollama) selectable by config, with the same validator and fallback. *Acceptance:* same contract tests pass with the fake transport.
 - [x] **P13.29** Docs: README section (what it is, what is sent, limits), About tab, `docs/DEMO_SCRIPT.md` demo flow (one question per content type, one forced fallback), decision records, plan section update. *Acceptance:* all statements match the code (`python tools/verify_claims.py` if present).
-- [ ] **P13.30** Phase 13 gate and "break your own work" ritual: five hypotheses, each tested (an injected item title; an invented id; every key returns 429; a key echoed inside an upstream error body; an oversized conversation), plus a clean-clone CI run (`pytest -m "not real_data and not llm_live"`) and `python tools/check.py`. *Acceptance:* raw outputs in the Session Log.
+- [x] **P13.30** Phase 13 gate and "break your own work" ritual: five hypotheses, each tested (an injected item title; an invented id; every key returns 429; a key echoed inside an upstream error body; an oversized conversation), plus a clean-clone CI run (`pytest -m "not real_data and not llm_live"`) and `python tools/check.py`. *Acceptance:* raw outputs in the Session Log.
 
 ---
 

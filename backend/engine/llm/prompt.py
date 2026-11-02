@@ -58,8 +58,7 @@ def format_user_profile_block(
 
     if recent_items:
         lines.append(
-            f"Recent {spec.chat.noun.capitalize()} History: "
-            + ", ".join(recent_items[:5])
+            f"Recent {spec.chat.noun.capitalize()} History: " + ", ".join(recent_items[:5])
         )
 
     if len(lines) == 1:

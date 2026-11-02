@@ -1150,6 +1150,14 @@
             "title": "Item Count",
             "type": "integer"
           },
+          "starter_prompts": {
+            "description": "Domain starter prompt chips for chat concierge",
+            "items": {
+              "type": "string"
+            },
+            "title": "Starter Prompts",
+            "type": "array"
+          },
           "supports_cold_start": {
             "description": "Whether model supports cold-start recommendation",
             "title": "Supports Cold Start",

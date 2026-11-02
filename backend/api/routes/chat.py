@@ -151,11 +151,7 @@ async def post_chat(
         if quota_mgr is not None and llm_client is None:
             key_for_req, project_id, retry_after_s = await quota_mgr.pick_credential()
             if key_for_req is None:
-                retry_s = (
-                    max(1, math.ceil(retry_after_s))
-                    if retry_after_s is not None
-                    else None
-                )
+                retry_s = max(1, math.ceil(retry_after_s)) if retry_after_s is not None else None
                 return build_fallback_response(
                     spec=spec,
                     candidates=candidates,

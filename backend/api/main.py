@@ -2,17 +2,24 @@
 
 from __future__ import annotations
 
+import logging
 import os
+from contextlib import asynccontextmanager
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 # Critical performance and thread isolation: Set thread limits before importing numpy
 os.environ["OPENBLAS_NUM_THREADS"] = "1"
 os.environ["MKL_NUM_THREADS"] = "1"
 os.environ["OMP_NUM_THREADS"] = "1"
 
-import logging
-from contextlib import asynccontextmanager
-from pathlib import Path
-from typing import TYPE_CHECKING, Any
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    load_dotenv(Path(__file__).resolve().parent.parent.parent / ".env")
+except (ImportError, OSError):
+    pass
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware

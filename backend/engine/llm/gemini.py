@@ -135,9 +135,7 @@ class GeminiClient:
             contents.append({"role": role, "parts": parts})
 
         body = {
-            "systemInstruction": {
-                "parts": [{"text": request.system_instruction}]
-            },
+            "systemInstruction": {"parts": [{"text": request.system_instruction}]},
             "contents": contents,
             "generationConfig": {
                 "temperature": request.temperature,

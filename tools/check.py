@@ -75,7 +75,16 @@ def main() -> None:
         ),
         (
             "Pytest Test Suite",
-            [py, "-m", "pytest", "tests/", "-v", "--tb=short", "-m", "not real_data"],
+            [
+                py,
+                "-m",
+                "pytest",
+                "tests/",
+                "-v",
+                "--tb=short",
+                "-m",
+                "not real_data and not llm_live",
+            ],
             BACKEND_DIR,
         ),
     ]

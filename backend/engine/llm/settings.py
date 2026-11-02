@@ -90,6 +90,14 @@ def _parse_int(val: str | None, default: int, var_name: str, min_val: int = 0) -
 
 def load_chat_settings(env: Mapping[str, str] | None = None) -> ChatSettings:
     """Load and strictly validate chat settings from environment mapping."""
+    if env is None:
+        try:
+            from dotenv import load_dotenv
+
+            load_dotenv()
+        except ImportError:
+            pass
+
     e = env if env is not None else os.environ
 
     enabled = _parse_bool(e.get("CHAT_ENABLED"), "CHAT_ENABLED")
@@ -112,7 +120,10 @@ def load_chat_settings(env: Mapping[str, str] | None = None) -> ChatSettings:
         raise ConfigError("GEMINI_MODEL must not be empty when CHAT_ENABLED=true.")
 
     rpm_per_project = _parse_float(
-        e.get("GEMINI_RPM_PER_PROJECT"), default=10.0, var_name="GEMINI_RPM_PER_PROJECT", min_val=0.0
+        e.get("GEMINI_RPM_PER_PROJECT"),
+        default=10.0,
+        var_name="GEMINI_RPM_PER_PROJECT",
+        min_val=0.0,
     )
     timeout_s = _parse_float(
         e.get("CHAT_TIMEOUT_S"), default=8.0, var_name="CHAT_TIMEOUT_S", min_val=0.0

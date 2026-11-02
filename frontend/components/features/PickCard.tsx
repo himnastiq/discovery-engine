@@ -129,3 +129,4 @@ export function PickCard({ pick, cardType = 'movie', onSelect }: PickCardProps) 
     </div>
   );
 }
+

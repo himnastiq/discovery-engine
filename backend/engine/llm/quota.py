@@ -123,7 +123,9 @@ class QuotaManager:
             # Check cooldown
             if now < b.cooldown_until:
                 wait_time = b.cooldown_until - now
-                earliest_wait = min(earliest_wait, wait_time) if earliest_wait is not None else wait_time
+                earliest_wait = (
+                    min(earliest_wait, wait_time) if earliest_wait is not None else wait_time
+                )
                 continue
 
             # Check token bucket
@@ -140,7 +142,9 @@ class QuotaManager:
                 fill_rate = b.rpm / 60.0
                 tokens_needed = 1.0 - b.tokens
                 token_wait = tokens_needed / fill_rate if fill_rate > 0 else 60.0
-                earliest_wait = min(earliest_wait, token_wait) if earliest_wait is not None else token_wait
+                earliest_wait = (
+                    min(earliest_wait, token_wait) if earliest_wait is not None else token_wait
+                )
 
         return None, None, earliest_wait
 

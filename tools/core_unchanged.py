@@ -69,6 +69,7 @@ ALLOWED_PATTERNS = [
     "frontend/**/*",
     "IMPLEMENTATION_PLAN.md",
     "README.md",
+    "backend/README.md",
     "Makefile",
     "run.sh",
     "run.bat",

@@ -111,7 +111,9 @@ def test_gemini_client_rate_limited_429() -> None:
                 "error": {
                     "code": 429,
                     "message": "Resource exhausted",
-                    "details": [{"@type": "type.googleapis.com/google.rpc.RetryInfo", "retryDelay": "15s"}],
+                    "details": [
+                        {"@type": "type.googleapis.com/google.rpc.RetryInfo", "retryDelay": "15s"}
+                    ],
                 }
             },
         )
@@ -168,15 +170,7 @@ def test_gemini_client_malformed_json_bad_output() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         return httpx.Response(
             200,
-            json={
-                "candidates": [
-                    {
-                        "content": {
-                            "parts": [{"text": "Not valid JSON at all {"}]
-                        }
-                    }
-                ]
-            },
+            json={"candidates": [{"content": {"parts": [{"text": "Not valid JSON at all {"}]}}]},
         )
 
     client = GeminiClient(api_key=SECRET_KEY, client=make_mock_client(handler))
@@ -193,9 +187,13 @@ def test_gemini_client_zero_secrets_in_logs(caplog: pytest.LogCaptureFixture) ->
 
     handlers = [
         lambda req: httpx.Response(401, json={"error": {"message": "Invalid key"}}),
-        lambda req: httpx.Response(429, headers={"retry-after": "5"}, json={"error": {"message": "quota"}}),
+        lambda req: httpx.Response(
+            429, headers={"retry-after": "5"}, json={"error": {"message": "quota"}}
+        ),
         lambda req: httpx.Response(500, text="error"),
-        lambda req: httpx.Response(200, json={"candidates": [{"content": {"parts": [{"text": "{}"}]}}]}),
+        lambda req: httpx.Response(
+            200, json={"candidates": [{"content": {"parts": [{"text": "{}"}]}}]}
+        ),
     ]
 
     for h in handlers:
