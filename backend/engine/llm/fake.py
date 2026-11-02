@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 from engine.llm.types import (
     LLMPick,
     LLMRequest,
@@ -51,12 +53,19 @@ class FakeLLMClient:
             + "."
         )
 
+        raw_json = json.dumps(
+            {
+                "reply": reply,
+                "picks": [{"item_id": p.item_id, "reason": p.reason} for p in picks],
+            }
+        )
+
         return LLMResult(
             reply=reply,
             picks=picks,
             model=self.default_model,
             latency_ms=15,
-            raw_text=reply,
+            raw_text=raw_json,
             meta={"simulated": True, "call_index": self.call_count},
         )
 

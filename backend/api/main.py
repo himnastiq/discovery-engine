@@ -19,6 +19,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.errors import register_error_handlers
 from api.lookups import build_type_lookups
+from api.routes.chat import router as chat_router
 from api.routes.metadata import router as metadata_router
 from api.routes.recommend import router as recommend_router
 from api.routes.users import router as users_router
@@ -27,6 +28,10 @@ from api.security import SecurityMiddleware
 from engine import registry
 from engine.artifacts import load_artifacts, verify_artifacts
 from engine.config import resolve_serving_config
+from engine.llm.cache import ChatResponseCache
+from engine.llm.quota import QuotaManager
+from engine.llm.rate_limit import IPRateLimiter
+from engine.llm.settings import load_chat_settings, log_chat_startup
 from engine.logging_utils import configure_logging, get_logger
 
 if TYPE_CHECKING:
@@ -127,6 +132,22 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 "Content type '%s' failed to load (marking unavailable): %s", content_type, reason
             )
 
+    # 5. Initialize Chat concierge state (Phase 13, P13.14)
+    chat_settings = load_chat_settings()
+    log_chat_startup(chat_settings)
+    app.state.chat_settings = chat_settings
+    app.state.chat_cache = ChatResponseCache(ttl_s=float(chat_settings.cache_ttl_s))
+    app.state.chat_ip_limiter = IPRateLimiter(rpm=chat_settings.ip_rpm)
+    if chat_settings.api_keys:
+        app.state.chat_quota_manager = QuotaManager(
+            api_keys=chat_settings.api_keys,
+            projects=chat_settings.key_projects,
+            rpm_per_project=chat_settings.rpm_per_project,
+        )
+    else:
+        app.state.chat_quota_manager = None
+    app.state.llm_client = None
+
     yield
 
     logger.info("Discovery Engine API shutting down.")
@@ -157,10 +178,11 @@ def create_app() -> FastAPI:
     # Register standardized error handlers (P7.2)
     register_error_handlers(app)
 
-    # Register routers (P7.3, P7.4, P7.5)
+    # Register routers (P7.3, P7.4, P7.5, P13.14)
     app.include_router(metadata_router)
     app.include_router(users_router)
     app.include_router(recommend_router)
+    app.include_router(chat_router)
 
     # Root /health alias for load balancers and platform monitors
     @app.get("/health", include_in_schema=False)

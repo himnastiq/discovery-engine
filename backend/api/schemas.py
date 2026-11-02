@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 # ---------------------------------------------------------------------------
 # Unified Error Response Schema
@@ -335,3 +335,93 @@ class SimilarResponse(BaseModel):
     meta: dict[str, Any] = Field(
         default_factory=dict, description="Diagnostic and serving metadata"
     )
+
+
+# --- Chat Schemas (Phase 13, P13.14) ---
+
+
+class ChatMessage(BaseModel):
+    """A single chat message in a conversation turn."""
+
+    role: str = Field(..., description="Message author role ('user' or 'assistant')")
+    content: str = Field(..., min_length=1, max_length=500, description="Message text content")
+
+    @field_validator("role")
+    @classmethod
+    def validate_role(cls, v: str) -> str:
+        cleaned = str(v).strip().lower()
+        if cleaned not in ("user", "assistant"):
+            raise ValueError("Message role must be 'user' or 'assistant'")
+        return cleaned
+
+
+class ChatRequest(BaseModel):
+    """Request payload for POST /v1/chat."""
+
+    type: str = Field(..., min_length=1, max_length=50, description="Content type identifier")
+    user_id: str | None = Field(default=None, max_length=100, description="Optional user unique ID")
+    messages: list[ChatMessage] = Field(
+        ..., min_length=1, max_length=10, description="Conversation history (1 to 10 messages)"
+    )
+
+    @field_validator("messages")
+    @classmethod
+    def validate_messages(cls, v: list[ChatMessage]) -> list[ChatMessage]:
+        if not v:
+            raise ValueError("Conversation must contain at least 1 message")
+        if len(v) > 10:
+            raise ValueError("Conversation cannot exceed 10 messages")
+        total_len = sum(len(m.content) for m in v)
+        if total_len > 4000:
+            raise ValueError(
+                f"Total conversation content length ({total_len}) exceeds 4,000 characters limit"
+            )
+        if v[-1].role != "user":
+            raise ValueError("The last message in conversation history must be from 'user'")
+        return v
+
+
+class ChatPick(BaseModel):
+    """A grounded candidate item recommended by the concierge."""
+
+    item_id: str = Field(..., description="Item unique identifier")
+    title: str = Field(..., description="Item display title")
+    subtitle: str | None = Field(default=None, description="Item subtitle")
+    categories: list[str] = Field(default_factory=list, description="Item categories list")
+    year: int | None = Field(default=None, description="Release or publication year")
+    reason: str = Field(
+        ..., max_length=200, description="Concise plain text recommendation rationale"
+    )
+    rank: int = Field(..., ge=1, description="1-based candidate rank from the engine")
+
+
+class ChatMeta(BaseModel):
+    """Diagnostic and execution metadata for a chat completion."""
+
+    model: str | None = Field(default=None, description="Active LLM model identifier")
+    latency_ms: int = Field(..., ge=0, description="Elapsed request time in milliseconds")
+    cache_hit: bool = Field(default=False, description="Whether response was served from cache")
+    fallback_reason: str | None = Field(
+        default=None,
+        description="Reason for engine fallback if mode='fallback'",
+    )
+    retry_after_s: int | None = Field(
+        default=None, ge=0, description="Recommended retry cooldown in seconds"
+    )
+
+
+class ChatResponse(BaseModel):
+    """Unified response payload for POST /v1/chat."""
+
+    reply: str = Field(..., max_length=800, description="Plain text conversational response")
+    picks: list[ChatPick] = Field(default_factory=list, description="Curated recommendation cards")
+    mode: str = Field(..., description="Serving mode: 'llm' or 'fallback'")
+    meta: ChatMeta = Field(..., description="Request metadata and status")
+
+
+class ChatStatusResponse(BaseModel):
+    """Response payload for GET /v1/chat/status."""
+
+    enabled: bool = Field(..., description="Whether chat feature flag CHAT_ENABLED is active")
+    ready: bool = Field(..., description="Whether LLM service has valid credentials ready")
+    model: str | None = Field(default=None, description="Configured model identifier")

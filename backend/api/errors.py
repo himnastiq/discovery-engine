@@ -84,15 +84,59 @@ class PayloadTooLargeError(APIError):
         )
 
 
+class InvalidRequestError(APIError):
+    """Raised when request parameters violate semantic rules (422 invalid_request)."""
+
+    def __init__(self, message: str, details: Any | None = None) -> None:
+        super().__init__(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            code="invalid_request",
+            message=message,
+            details=details,
+        )
+
+
+class ChatUnavailableError(APIError):
+    """Raised when chat assistant is disabled (503 chat_unavailable)."""
+
+    def __init__(self, message: str = "Chat assistant is currently disabled.") -> None:
+        super().__init__(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            code="chat_unavailable",
+            message=message,
+            details=None,
+        )
+
+
+class ChatRateLimitedError(APIError):
+    """Raised when IP request rate limit is exceeded (429 chat_rate_limited)."""
+
+    def __init__(
+        self,
+        retry_after: int,
+        message: str = "Too many chat requests from this IP. Please wait before retrying.",
+    ) -> None:
+        super().__init__(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            code="chat_rate_limited",
+            message=message,
+            details={"retry_after_s": retry_after},
+        )
+        self.retry_after = retry_after
+        self.headers = {"Retry-After": str(retry_after)}
+
+
 def _make_error_response(
     status_code: int,
     code: str,
     message: str,
     details: Any | None = None,
+    headers: dict[str, str] | None = None,
 ) -> JSONResponse:
     """Helper to generate standard Discovery Engine error responses."""
     return JSONResponse(
         status_code=status_code,
+        headers=headers,
         content={
             "error": {
                 "code": code,
@@ -105,11 +149,13 @@ def _make_error_response(
 
 async def api_error_handler(_request: Request, exc: APIError) -> JSONResponse:
     """Handler for application-level APIError exceptions."""
+    headers = getattr(exc, "headers", None)
     return _make_error_response(
         status_code=exc.status_code,
         code=exc.code,
         message=exc.message,
         details=exc.details,
+        headers=headers,
     )
 
 
