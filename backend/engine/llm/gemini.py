@@ -279,4 +279,3 @@ class GeminiClient:
         except Exception as exc:
             logger.warning("Failed to parse Gemini response as structured JSON: %s", exc)
             raise LLMBadOutput(f"Malformed Gemini JSON output: {exc}") from exc
-
