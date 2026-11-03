@@ -70,7 +70,7 @@ class GeminiClient:
     def __init__(
         self,
         api_key: str,
-        model: str = "gemini-2.5-flash",
+        model: str = "gemini-3-flash-preview",
         timeout_s: float = 8.0,
         client: httpx.AsyncClient | None = None,
     ) -> None:
@@ -89,6 +89,38 @@ class GeminiClient:
     def __str__(self) -> str:
         return self.__repr__()
 
+    async def complete_with_fallback(
+        self,
+        request: LLMRequest,
+        fallback_models: tuple[str, ...] = ("gemini-3.6-flash",),
+    ) -> LLMResult:
+        """Try this client's model first, then each backup model once.
+
+        Only server errors (5xx such as 503) and timeouts move on to the
+        next model. Auth errors (401/403) and rate limits (429) are raised
+        straight away, because a different model would not fix them.
+        """
+        last_error: Exception | None = None
+
+        for model in (self.model, *fallback_models):
+            # Build a temporary client for this model. This is safer than
+            # changing self.model, which could affect overlapping requests.
+            client = GeminiClient(
+                self._api_key,
+                model=model,
+                timeout_s=self.timeout_s,
+                client=self._external_client,
+            )
+            try:
+                return await client.complete(request)
+            except (LLMUpstreamError, LLMTimeout) as exc:
+                logger.warning("Model %s failed (%s), trying next", model, exc)
+                last_error = exc
+
+        # Every model failed: let the caller handle it (e.g. the fallback reply).
+        assert last_error is not None  # the loop always runs at least once
+        raise last_error
+
     async def complete(self, request: LLMRequest) -> LLMResult:
         """Send a generateContent request to Gemini and return structured picks."""
         url = f"{GEMINI_BASE_URL}/{self.model}:generateContent"
@@ -97,10 +129,9 @@ class GeminiClient:
             "x-goog-api-key": self._api_key,
         }
 
-        # Build schema enforcing candidate-id enum when candidates are provided
+        # Structured output schema: validate candidate IDs in validator.py
+        # Avoid huge enums in responseSchema which cause Gemini server-side grammar compilation timeouts
         item_id_schema: dict[str, Any] = {"type": "STRING"}
-        if request.candidate_ids:
-            item_id_schema["enum"] = request.candidate_ids
 
         response_schema = {
             "type": "OBJECT",
@@ -134,15 +165,20 @@ class GeminiClient:
             parts = msg.get("parts") or [{"text": str(msg.get("content", ""))}]
             contents.append({"role": role, "parts": parts})
 
+        generation_config: dict[str, Any] = {
+            "temperature": request.temperature,
+            "maxOutputTokens": request.max_output_tokens,
+            "responseMimeType": "application/json",
+            "responseSchema": response_schema,
+        }
+        # Disable thinking tokens for flash/preview models to prevent token budget exhaustion
+        if "preview" in self.model or "gemini-3.6" in self.model or "gemini-2.5" in self.model:
+            generation_config["thinkingConfig"] = {"thinkingBudget": 0}
+
         body = {
             "systemInstruction": {"parts": [{"text": request.system_instruction}]},
             "contents": contents,
-            "generationConfig": {
-                "temperature": request.temperature,
-                "maxOutputTokens": request.max_output_tokens,
-                "responseMimeType": "application/json",
-                "responseSchema": response_schema,
-            },
+            "generationConfig": generation_config,
         }
 
         start_time = time.perf_counter()
@@ -243,3 +279,4 @@ class GeminiClient:
         except Exception as exc:
             logger.warning("Failed to parse Gemini response as structured JSON: %s", exc)
             raise LLMBadOutput(f"Malformed Gemini JSON output: {exc}") from exc
+

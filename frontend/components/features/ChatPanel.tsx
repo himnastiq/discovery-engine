@@ -78,10 +78,10 @@ export function ChatPanel({
   const starterPrompts = currentTypeInfo?.starter_prompts?.length
     ? currentTypeInfo.starter_prompts
     : [
-        'Suggest recommendations based on my profile',
-        'What hidden gems do you recommend?',
-        'Recommend top choices for my taste',
-      ];
+      'Suggest recommendations based on my profile',
+      'What hidden gems do you recommend?',
+      'Recommend top choices for my taste',
+    ];
 
   // Focus restoration & initial focus
   useEffect(() => {
@@ -400,13 +400,12 @@ export function ChatPanel({
               )}
 
               <div
-                className={`flex max-w-[85%] flex-col gap-2 rounded-[var(--radius-card)] p-3 text-xs leading-relaxed ${
-                  msg.role === 'user'
+                className={`flex max-w-[85%] flex-col gap-2 rounded-[var(--radius-card)] p-3 text-xs leading-relaxed ${msg.role === 'user'
                     ? 'bg-[var(--color-accent-active)] text-white ml-auto'
                     : msg.isError
                       ? 'border border-[var(--color-error)]/40 bg-[var(--color-elevated)] text-[var(--color-error)]'
                       : 'border border-[var(--color-border)] bg-[var(--color-elevated)] text-[var(--color-text)]'
-                }`}
+                  }`}
               >
                 {/* Fallback badge */}
                 {msg.mode === 'fallback' && (

@@ -462,8 +462,8 @@ def main() -> int:
     parser.add_argument(
         "--timeout",
         type=int,
-        default=30,
-        help="Health check timeout in seconds (default 30)",
+        default=60,
+        help="Health check timeout in seconds (default 60)",
     )
     parser.add_argument(
         "--artifacts-dir",

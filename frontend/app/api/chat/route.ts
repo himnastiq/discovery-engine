@@ -39,6 +39,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   const proxyRes = await proxyToBackend('/v1/chat', {
     method: 'POST',
     body: JSON.stringify(parsed.data),
+    timeoutMs: 60000,
   });
 
   // If proxy returned error or rate limit, forward status and Retry-After intact

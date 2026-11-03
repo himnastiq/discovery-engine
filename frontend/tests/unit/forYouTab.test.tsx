@@ -78,13 +78,13 @@ describe('ForYouTab (P9.4 & Universal UI Consistency)', () => {
     expect(screen.getByRole('button', { name: /try again/i })).toBeInTheDocument();
   });
 
-  it('renders consistent model badges, trending, and explore links across movies, products, and articles', async () => {
+  it('renders consistent catalog labels, trending, and explore links across movies, products, and articles without model badges', async () => {
     // 1. Movies domain
     const { unmount: unmountMovies } = renderWithClient(
       <ForYouTab type="movies" user="1" k={10} onKChange={vi.fn()} />
     );
-    expect(await screen.findByText('SAR model')).toBeInTheDocument();
-    expect(screen.getByText('MovieLens 1M')).toBeInTheDocument();
+    expect(screen.queryByText('SAR model')).not.toBeInTheDocument();
+    expect(await screen.findByText('MovieLens 1M')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /trending now in movies/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /compare models/i })).toHaveAttribute('href', '/?type=movies&tab=compare');
     unmountMovies();
@@ -93,8 +93,8 @@ describe('ForYouTab (P9.4 & Universal UI Consistency)', () => {
     const { unmount: unmountProducts } = renderWithClient(
       <ForYouTab type="products" user="B0001" k={10} onKChange={vi.fn()} />
     );
-    expect(await screen.findByText('SAR model')).toBeInTheDocument();
-    expect(screen.getByText('Amazon Video Games')).toBeInTheDocument();
+    expect(screen.queryByText('SAR model')).not.toBeInTheDocument();
+    expect(await screen.findByText('Amazon Video Games')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /trending now in products/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /compare models/i })).toHaveAttribute('href', '/?type=products&tab=compare');
     unmountProducts();
@@ -103,8 +103,8 @@ describe('ForYouTab (P9.4 & Universal UI Consistency)', () => {
     renderWithClient(
       <ForYouTab type="articles" user="U1030" k={10} onKChange={vi.fn()} />
     );
-    expect(await screen.findByText('TF-IDF model')).toBeInTheDocument();
-    expect(screen.getByText('MIND News Feed')).toBeInTheDocument();
+    expect(screen.queryByText('TF-IDF model')).not.toBeInTheDocument();
+    expect(await screen.findByText('MIND News Feed')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /trending now in articles/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /compare models/i })).toHaveAttribute('href', '/?type=articles&tab=compare');
   });

@@ -22,29 +22,17 @@ export interface ForYouTabProps {
 }
 
 interface DomainMeta {
-  modelBadge: string;
-  modelBadgeColor: string;
-  modelTooltip: string;
   catalogLabel: string;
 }
 
 const DOMAIN_METAS: Record<string, DomainMeta> = {
   movies: {
-    modelBadge: 'SAR model',
-    modelBadgeColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-    modelTooltip: 'Recommendations served by the SAR collaborative-filtering backend',
     catalogLabel: 'MovieLens 1M',
   },
   products: {
-    modelBadge: 'SAR model',
-    modelBadgeColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-    modelTooltip: 'Item-to-item co-occurrence model fitted on Amazon Video Games reviews',
     catalogLabel: 'Amazon Video Games',
   },
   articles: {
-    modelBadge: 'TF-IDF model',
-    modelBadgeColor: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/30',
-    modelTooltip: 'Content-based TF-IDF model matching articles to user interest profile',
     catalogLabel: 'MIND News Feed',
   },
 };
@@ -90,6 +78,8 @@ export function ForYouTab({
         <AIInsights
           items={recData?.results || []}
           cardType={cardType}
+          type={type}
+          userId={user}
           onSelectItem={onSelectItem}
           isLoading={isLoading}
         />
@@ -102,12 +92,6 @@ export function ForYouTab({
                 Personalized Recommendations
               </h3>
               {recData && <ModeBadge mode={recData.mode} />}
-              <span
-                className={`text-[11px] font-semibold px-2 py-0.5 rounded-[4px] border ${meta.modelBadgeColor}`}
-                title={meta.modelTooltip}
-              >
-                {meta.modelBadge}
-              </span>
               <span className="text-xs text-[var(--color-text-secondary)] bg-[var(--color-surface)] px-2 py-0.5 rounded-[4px] border border-[var(--color-border)] tabular-nums">
                 {meta.catalogLabel}
               </span>

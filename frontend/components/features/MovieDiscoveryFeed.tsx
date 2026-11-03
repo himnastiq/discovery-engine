@@ -179,6 +179,8 @@ export function MovieDiscoveryFeed({
           <AIInsights
             items={insightItems}
             cardType="movie"
+            type="movies"
+            userId={user}
             onSelectItem={onSelectItem}
             isLoading={propIsLoading}
           />

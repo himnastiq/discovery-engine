@@ -41,6 +41,7 @@ desktop.ini
 data/
 artifacts*/
 audit/
+backend/llm/
 
 # Node / Frontend
 node_modules/
@@ -80,6 +81,7 @@ pytest_log.txt
 .demo/
 .tmp/
 demo_backup/
+backend/llm/
 
 # Lock files that should be committed are excluded from this ignore
 # uv.lock and package-lock.json ARE committed
